@@ -1,2 +1,14 @@
+#node modules from npm
 node_modules
+
+#local database for development
 DB
+
+#environment variables
+config/.env
+
+#webpack builds
+build
+
+#log files
+*.log
