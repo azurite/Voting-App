@@ -1,0 +1,25 @@
+{
+  "name": "voting-app",
+  "version": "1.0.0",
+  "description": "A Voting app from the fcc fullstack challenges",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mern",
+    "fcc",
+    "voting-app",
+    "fullstack"
+  ],
+  "author": "MarkoN95",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.10.0",
+    "eslint-plugin-react": "^6.6.0",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-merge": "^0.15.0",
+    "webpack-validator": "^2.2.9"
+  }
+}
