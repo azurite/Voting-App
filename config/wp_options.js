@@ -35,6 +35,14 @@ exports.minify = function() {
   };
 };
 
+exports.deduplicate = function() {
+  return {
+    plugins: [
+      new webpack.optimize.DedupePlugin()
+    ]
+  };
+};
+
 exports.clean = function(path) {
   return {
     plugins: [
