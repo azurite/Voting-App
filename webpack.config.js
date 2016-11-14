@@ -62,6 +62,7 @@ switch(process.env.npm_lifecycle_event) {
       options.clean(PATHS.build.client),
       options.setFreeVariables(),
       options.extractBundle({ name: "vendor", entries: ["react", "react-dom", "react-router"] }),
+      options.deduplicate(),
       options.minify(),
       options.htmlPlugin({ template: PATHS.template }),
       options.pugLoader({ include: PATHS.client }),
@@ -84,8 +85,11 @@ switch(process.env.npm_lifecycle_event) {
         devtool: "source-map"
       },
       options.clean(PATHS.build.server),
-      options.babelLoader({ include: [PATHS.app, PATHS.server] }),
-      options.nodeModules()
+      options.nodeModules(),
+      options.setFreeVariables(),
+      options.deduplicate(),
+      options.minify(),
+      options.babelLoader({ include: [PATHS.app, PATHS.server] })
     );
     break;
 
