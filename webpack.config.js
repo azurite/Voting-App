@@ -40,17 +40,18 @@ switch(process.env.npm_lifecycle_event) {
     config = merge(
       common,
       { devtool: "eval-source-map" },
+      { entry: { style: PATHS.style[0] } },
       options.htmlPlugin({ template: PATHS.template }),
       options.pugLoader({ include: PATHS.client }),
       options.babelLoader({ include: PATHS.app }),
-      options.extractCSS({ include: PATHS.style, chunkhash: false }),
+      options.extractCSS({ include: PATHS.style[0], chunkhash: false }),
       options.devServer({
         host: process.env.HOST,
         port: process.env.PORT
       })
     );
     break;
-
+    
   case "build:client":
     config = merge(
       common,

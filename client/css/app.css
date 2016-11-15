@@ -1,3 +1,15 @@
-.custom-menu {
-  background-color: brown;
+.menu {
+  background-color: #2D3E50;
+}
+
+.menu-link {
+  padding: 25px;
+}
+
+.menu-right {
+  float: right;
+}
+
+.test {
+  border: 1px solid #000;
 }

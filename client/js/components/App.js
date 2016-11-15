@@ -1,6 +1,20 @@
 const React = require("react");
 const { Link } = require("react-router");
 
+const MenuItem = React.createClass({
+  propTypes: {
+    to: React.PropTypes.string.isRequired,
+    children: React.PropTypes.string
+  },
+  render: function() {
+    return (
+      <li className="pure-menu-item">
+        <Link to={this.props.to} className="pure-menu-link menu-link">{this.props.children}</Link>
+      </li>
+    );
+  }
+});
+
 module.exports = React.createClass({
   displayName: "App",
   propTypes: {
@@ -8,13 +22,16 @@ module.exports = React.createClass({
   },
   render: function() {
     return (
-      <div className="pure-menu pure-menu-horizontal">
-        <ul className="pure-menu-list">
-          <li className="pure-menu-item"><Link to="/" className="pure-menu-link">Voting App</Link></li>
-          <li className="pure-menu-item"><Link to="/polls" className="pure-menu-link">Polls</Link></li>
-          <li className="pure-menu-item"><Link to="/login" className="pure-menu-link">Login</Link></li>
-          <li className="pure-menu-item"><Link to="/register" className="pure-menu-link">Register</Link></li>
-        </ul>
+      <div>
+        <div className="pure-menu pure-menu-horizontal menu">
+          <span className="pure-menu-heading">Voting App</span>
+          <ul className="pure-menu-list">
+            <MenuItem to="/">Home</MenuItem>
+            <MenuItem to="/polls">Polls</MenuItem>
+            <MenuItem to="/login">Login</MenuItem>
+            <MenuItem to="/register">Register</MenuItem>
+          </ul>
+        </div>
         {this.props.children}
       </div>
     );
