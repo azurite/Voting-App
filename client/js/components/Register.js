@@ -1,11 +1,11 @@
 const React = require("react");
 
 module.exports = React.createClass({
-  displayName: "Home",
+  displayName: "Register",
   render: function() {
     return (
       <div>
-        <h2>HomePage</h2>
+        <h2>Register</h2>
       </div>
     );
   }
