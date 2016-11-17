@@ -6,5 +6,6 @@ Buglist:
 
 -------------------------------------------------------------------------------
 Todolist:
-
+- Disable Button effects of Register Button
+- Make Footer always stick to the bottom of the page
 -------------------------------------------------------------------------------

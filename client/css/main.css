@@ -1,7 +1,30 @@
 @import url("./app.css");
 @import url("./home.css");
 @import url("./login.css");
+@import url("./register.css");
 
 body {
   background-color: #E7E7E7;
+}
+
+:focus {
+  outline: none !important;
+}
+
+.copy {
+  text-align: center;
+  padding: 15px;
+}
+
+.copy a {
+  color: #E7E7E7;
+  text-decoration: none;
+}
+
+.copy a:hover {
+  text-decoration: underline;
+}
+
+.copy a:visited {
+  text-decoration: none;
 }
