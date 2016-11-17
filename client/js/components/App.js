@@ -1,6 +1,7 @@
 const React = require("react");
 const { Navbar, Nav, NavItem } = require("react-bootstrap");
 const { LinkContainer, IndexLinkContainer } = require("react-router-bootstrap");
+const Footer = require("./Footer");
 
 const App = React.createClass({
   propTypes: {
@@ -26,6 +27,7 @@ const App = React.createClass({
           </Navbar.Collapse>
         </Navbar>
         {this.props.children}
+        <Footer/>
       </div>
     );
   }

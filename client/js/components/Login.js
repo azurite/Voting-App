@@ -1,33 +1,6 @@
 const React = require("react");
 const { Grid, Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, Checkbox } = require("react-bootstrap");
-
-const ExternalLogin = React.createClass({
-  propTypes: {
-    children: React.PropTypes.string,
-    id: React.PropTypes.string.isRequired,
-    login: React.PropTypes.func.isRequired
-  },
-  render: function() {
-    return (
-      <Button id={this.props.id} bsSize="large" className="accordion" onClick={this.props.login} block>
-        {this.props.children}
-      </Button>
-    );
-  }
-});
-
-const EmailLogin = React.createClass({
-  propTypes: {
-    toggleEmail: React.PropTypes.func.isRequired
-  },
-  render: function() {
-    return (
-      <Button bsSize="large" className="accordion" onClick={this.props.toggleEmail} block>
-        Login with Email
-      </Button>
-    );
-  }
-});
+const LoginButton = require("./AuthButton");
 
 const EmailForm = React.createClass({
   propTypes: {
@@ -38,9 +11,6 @@ const EmailForm = React.createClass({
       email: "",
       password: ""
     };
-  },
-  handleSubmit: function() {
-    //handle native login here (maybe add remember me functionality)
   },
   handleChange: function(e) {
     switch(e.target.id) {
@@ -53,6 +23,9 @@ const EmailForm = React.createClass({
         break;
     }
     return false;
+  },
+  handleSubmit: function() {
+    //handle native login here (maybe add remember me functionality)
   },
   render: function() {
     return (
@@ -101,7 +74,7 @@ const Login = React.createClass({
       emailOpen: false
     };
   },
-  toggleEmailLogin: function() {
+  toggleEmailForm: function() {
     this.setState({
       emailOpen: !this.state.emailOpen
     });
@@ -114,10 +87,10 @@ const Login = React.createClass({
       <Grid fluid>
         <Row>
           <Col md={4} sm={6} mdOffset={4} smOffset={3}>
-            <EmailLogin toggleEmail={this.toggleEmailLogin}/>
+            <LoginButton id="emailLogin" onClick={this.toggleEmailForm}>Login with Email</LoginButton>
             <EmailForm open={this.state.emailOpen}/>
-            <ExternalLogin id="github" login={this.login}>Login with Github</ExternalLogin>
-            <ExternalLogin id="twitter" login={this.login}>Login with Twitter</ExternalLogin>
+            <LoginButton id="github" onClick={this.login}>Login with Github</LoginButton>
+            <LoginButton id="twitter" onClick={this.login}>Login with Twitter</LoginButton>
           </Col>
         </Row>
       </Grid>

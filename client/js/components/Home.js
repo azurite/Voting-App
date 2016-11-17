@@ -83,13 +83,6 @@ const Home = React.createClass({
             </a>
           </Col>
         </Row>
-
-        <Row className="row-dark copy">
-          <Col>
-            <a href="https://github.com/MarkoN95" target="_blank">&#169; MarkoN95</a>
-          </Col>
-        </Row>
-
       </Grid>
     );
   }
