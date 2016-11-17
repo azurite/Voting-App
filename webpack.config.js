@@ -13,7 +13,8 @@ const PATHS = {
   },
   client: path.join(__dirname, "client"),
   template: path.join(__dirname, "client", "index.pug"),
-  server: path.resolve(__dirname, "server.js")
+  server: path.resolve(__dirname, "server.js"),
+  backend: path.join(__dirname, "app")
 };
 
 const common = {
@@ -89,7 +90,7 @@ switch(process.env.npm_lifecycle_event) {
       options.setFreeVariables(),
       options.deduplicate(),
       options.minify(),
-      options.babelLoader({ include: [PATHS.app, PATHS.server] })
+      options.babelLoader({ include: [PATHS.app, PATHS.server, PATHS.backend] })
     );
     break;
 

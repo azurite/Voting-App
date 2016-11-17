@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "webpack-dev-server",
-    "start:prod": "set NODE_ENV=production && npm run build:server && npm run build:client && node build/server/backend.js",
+    "start:prod": "set NODE_ENV=production&& npm run build:server && npm run build:client && node build/server/backend.js",
     "build:server": "webpack",
     "build:client": "webpack"
   },
