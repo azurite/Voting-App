@@ -1,0 +1,25 @@
+.accordion {
+  color: #E7E7E7;
+  border-radius: 0;
+  background-color: #34495E;
+}
+
+.accordion:hover {
+  color: #E7E7E7;
+  text-decoration: underline !important;
+  background-color: #34495E !important;
+}
+
+.panel {
+  margin-top: 10px;
+  background-color: #E7E7E7;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: 0.4s ease-in-out;
+}
+
+.panel.show {
+  max-height: 300px;
+  opacity: 1;
+}

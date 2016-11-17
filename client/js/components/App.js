@@ -2,8 +2,7 @@ const React = require("react");
 const { Navbar, Nav, NavItem } = require("react-bootstrap");
 const { LinkContainer, IndexLinkContainer } = require("react-router-bootstrap");
 
-module.exports = React.createClass({
-  displayName: "App",
+const App = React.createClass({
   propTypes: {
     children: React.PropTypes.node
   },
@@ -31,3 +30,5 @@ module.exports = React.createClass({
     );
   }
 });
+
+module.exports = App;
