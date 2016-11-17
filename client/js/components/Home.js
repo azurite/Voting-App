@@ -1,6 +1,13 @@
 const React = require("react");
 const { Grid, Row, Col, Image } = require("react-bootstrap");
 
+const MEDIA = (function(env) {
+  if(env === "production") {
+    return "/media";
+  }
+  return "/client/media";
+}(process.env.NODE_ENV));
+
 const Home = React.createClass({
   render: function() {
     return (
@@ -8,7 +15,7 @@ const Home = React.createClass({
 
         <Row>
           <Col md={8} mdOffset={2}>
-            <Image className="image-center-squared" src="/client/media/v-logo.gif" responsive circle/>
+            <Image className="image-center-squared" src={MEDIA + "/v-logo.gif"} responsive circle/>
             <h1 className="text-primary text-center title">Voting App</h1>
             <div className="line"/>
           </Col>
@@ -57,22 +64,22 @@ const Home = React.createClass({
         <Row className="tech">
           <Col md={2} sm={6} mdOffset={2} className="tech-row first">
             <a href="https://expressjs.com/" target="_blank">
-              <Image className="tech-stack-img express-img" src="/client/media/express-logo.png" responsive/>
+              <Image className="tech-stack-img express-img" src={MEDIA + "/express-logo.png"} responsive/>
             </a>
           </Col>
           <Col md={2} sm={6} className="tech-row">
             <a href="https://nodejs.org/en/" target="_blank">
-              <Image className="tech-stack-img node-img" src="/client/media/nodejs-logo.png" responsive/>
+              <Image className="tech-stack-img node-img" src={MEDIA + "/nodejs-logo.png"} responsive/>
             </a>
           </Col>
           <Col md={2} sm={6} className="tech-row">
             <a href="https://www.mongodb.com/" target="_blank">
-              <Image className="tech-stack-img mongo-img" src="/client/media/mongodb-logo.png" responsive/>
+              <Image className="tech-stack-img mongo-img" src={MEDIA + "/mongodb-logo.png"} responsive/>
             </a>
           </Col>
           <Col md={2} sm={6} className="tech-row">
             <a href="https://facebook.github.io/react/" target="_blank">
-              <Image className="tech-stack-img react-img" src="/client/media/react-hexagon-logo.png" responsive/>
+              <Image className="tech-stack-img react-img" src={MEDIA + "/react-hexagon-logo.png"} responsive/>
             </a>
           </Col>
         </Row>

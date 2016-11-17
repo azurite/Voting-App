@@ -47,7 +47,8 @@ exports.clean = function(path) {
   return {
     plugins: [
       new CleanWebpackPlugin([path], {
-        root: process.cwd()
+        root: process.cwd(),
+        exclude: ["media"]
       })
     ]
   };

@@ -13,6 +13,7 @@ app.use(serveStatic(path.join(process.cwd(), "build", "client")));
 
 configureRoutes(app);
 
-app.listen(process.env.PORT || 8080, () => {
-  console.log("App listening on port: " + app.get("port"));
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log("App listening on port: " + PORT);
 });
