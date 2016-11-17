@@ -1,8 +1,7 @@
 const React = require("react");
 const { Grid, Row, Col, Image } = require("react-bootstrap");
 
-module.exports = React.createClass({
-  displayName: "Home",
+const Home = React.createClass({
   render: function() {
     return (
       <Grid fluid>
@@ -88,3 +87,5 @@ module.exports = React.createClass({
     );
   }
 });
+
+module.exports = Home;
