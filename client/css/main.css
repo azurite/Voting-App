@@ -2,6 +2,7 @@
 @import url("./home.css");
 @import url("./login.css");
 @import url("./register.css");
+@import url("./polls.css");
 
 body {
   background-color: #E7E7E7;

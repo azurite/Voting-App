@@ -10,6 +10,12 @@
   background-color: #34495E !important;
 }
 
+.accordion:focus {
+  color: #E7E7E7 !important;
+  text-decoration: underline !important;
+  background-color: #34495E !important;
+}
+
 .panel {
   margin-top: 10px;
   background-color: #E7E7E7;

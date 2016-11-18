@@ -1,3 +1,8 @@
+#app-data-root {
+  min-height: 100%;
+  position: relative;
+}
+
 .navbar-custom {
   background-color: #34495E;
   border-radius: 0px;

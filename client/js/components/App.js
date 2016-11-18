@@ -9,7 +9,7 @@ const App = React.createClass({
   },
   render: function() {
     return (
-      <div>
+      <div id="app-data-root">
         <Navbar className="navbar-custom">
           <Navbar.Header>
             <Navbar.Brand className="menu-head">Voting App</Navbar.Brand>

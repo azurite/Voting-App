@@ -13,7 +13,7 @@ const Footer = React.createClass({
   render: function() {
     return (
       <Grid fluid>
-        <Row className={this.props.className}>
+        <Row className={this.props.className + " navbar-fixed-bottom"}>
           <Col lg={12} md={12} sm={12} xs={12}>
             <a href="https://github.com/MarkoN95" target="_blank">&#169; MarkoN95</a>
           </Col>

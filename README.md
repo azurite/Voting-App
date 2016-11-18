@@ -6,6 +6,7 @@ Buglist:
 
 -------------------------------------------------------------------------------
 Todolist:
-- Disable Button effects of Register Button
-- Make Footer always stick to the bottom of the page
+- Complete Poll Card
+- Complete Poll Detail View (new child route)
+- Migrate state management to redux
 -------------------------------------------------------------------------------
