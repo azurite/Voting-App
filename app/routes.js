@@ -3,6 +3,7 @@ const { renderToString } = require("react-dom/server");
 const { match, RouterContext } = require("react-router");
 
 const routes = require("../client/js/routes");
+const assets = require("./serve-bundles.js")({ root: process.cwd(), path: "/build/client" });
 
 module.exports = function(app) {
 
@@ -16,7 +17,7 @@ module.exports = function(app) {
       }
       else if(props) {
         const html = renderToString(<RouterContext {...props}/>);
-        res.render("index", { app: html });
+        res.render("index", { app: html, assets: assets });
       }
       else {
         res.status(404).send("not found");

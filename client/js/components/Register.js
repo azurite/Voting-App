@@ -6,23 +6,24 @@ const MAX_LENGTH = 8;
 
 const Register = React.createClass({
   getInitialState: function() {
+    // null=neutral, false=error, true=success
     return {
       email: {
         value: "",
-        isValid: true
+        isValid: null
       },
       password: {
         value: "",
-        isValid: true
+        isValid: null
       },
       password_confirm: {
         value: "",
-        isValid: true
+        isValid: null
       }
     };
   },
   getValidationState: function(input) {
-    if(input.value == "") {
+    if(input.value === "" || input.isValid === null) {
       return null;
     }
     if(input.isValid) {
@@ -47,7 +48,7 @@ const Register = React.createClass({
           this.setState({
             email: {
               value: email,
-              isValid: email === "" ? true : false
+              isValid: email === "" ? null : false
             }
           });
         }
@@ -69,7 +70,7 @@ const Register = React.createClass({
           this.setState({
             password: {
               value: pw,
-              isValid: pw === "" ? true : false
+              isValid: pw === "" ? null : false
             }
           });
         }
@@ -86,7 +87,7 @@ const Register = React.createClass({
           this.setState({
             password_confirm: {
               value: confirm_pw,
-              isValid: confirm_pw === "" ? true : false
+              isValid: confirm_pw === "" ? null : false
             }
           });
         }
@@ -147,7 +148,7 @@ const Register = React.createClass({
                     value={this.state.email.value}
                     onChange={this.handleChange}
                     onBlur={this.validate.bind(this, "email")}/>
-                  {this.state.email.isValid ? null : <HelpBlock>Invalid Email Address</HelpBlock>}
+                  {this.state.email.isValid === false ? <HelpBlock>Invalid Email Address</HelpBlock> : null}
                 </Col>
               </FormGroup>
 
@@ -162,7 +163,7 @@ const Register = React.createClass({
                     value={this.state.password.value}
                     onChange={this.handleChange}
                     onBlur={this.validate.bind(this, "password")}/>
-                  {this.state.password.isValid ? null : <HelpBlock>min 8 characters</HelpBlock>}
+                  {this.state.password.isValid === false ? <HelpBlock>min 8 characters</HelpBlock> : null}
                 </Col>
               </FormGroup>
 
@@ -174,7 +175,7 @@ const Register = React.createClass({
                     value={this.state.password_confirm.value}
                     onChange={this.handleChange}
                     onBlur={this.validate.bind(this, "password")}/>
-                  {this.state.password_confirm.isValid ? null : <HelpBlock>Passwords don't match</HelpBlock>}
+                  {this.state.password_confirm.isValid === false ? <HelpBlock>Passwords don't match</HelpBlock> : null}
                 </Col>
               </FormGroup>
 
