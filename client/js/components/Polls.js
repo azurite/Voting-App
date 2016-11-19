@@ -1,6 +1,8 @@
 const React = require("react");
 const { Grid, Row, Col, Button ,Form, FormGroup, FormControl, InputGroup } = require("react-bootstrap");
+
 const Poll = require("./PollCard");
+const Loading = require("./LoadingIcon.js");
 
 function pretendFetch(path, cb) {
   const polls = require("../dev/samplePolls");
@@ -48,20 +50,6 @@ const SearchBar = React.createClass({
   }
 });
 
-const Loading = React.createClass({
-  render: function() {
-    return (
-      <Row>
-        <Col>
-          <div className="loading-icon">
-            <i className="fa fa-spinner fa-spin fa-3x"></i>
-          </div>
-        </Col>
-      </Row>
-    );
-  }
-});
-
 const Polls = React.createClass({
   getInitialState: function() {
     return {
@@ -95,7 +83,7 @@ const Polls = React.createClass({
     return (
       <Grid fluid>
         <SearchBar onSearch={this.fetchPolls}/>
-        {this.state.isFetching ? <Loading/> : this.renderPolls()}
+        {this.state.isFetching ? <Loading size="fa-3x"/> : this.renderPolls()}
       </Grid>
     );
   }
