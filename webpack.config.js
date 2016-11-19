@@ -62,7 +62,7 @@ switch(process.env.npm_lifecycle_event) {
       },
       options.clean(PATHS.build.client),
       options.setFreeVariables(),
-      options.extractBundle({ name: "vendor", entries: ["react", "react-dom", "react-router"] }),
+      options.extractBundle({ name: "vendor", entries: ["react", "react-dom", "react-router", "redux", "react-redux"] }),
       options.deduplicate(),
       options.minify(),
       options.htmlPlugin({ template: PATHS.template }),
