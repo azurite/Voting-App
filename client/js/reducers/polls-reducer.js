@@ -1,6 +1,8 @@
+const types = require("../actions/action-manifest");
+
 const pollsReducer = function(state, action) {
   switch(action.type) {
-    case "FETCH-POLLS":
+    case types.FETCH_POLLS:
       return Object.assign({}, {
         searchBar: state.searchBar,
         polls: {
@@ -11,7 +13,7 @@ const pollsReducer = function(state, action) {
         }
       });
 
-    case "FETCH-SUCCESS":
+    case types.FETCH_SUCCESS:
       return Object.assign({}, {
         searchBar: state.searchBar,
         polls: {
@@ -22,7 +24,7 @@ const pollsReducer = function(state, action) {
         }
       });
 
-    case "FETCH-ERROR":
+    case types.FETCH_ERROR:
       return Object.assign({}, {
         searchBar: state.searchBar,
         polls: {
@@ -33,7 +35,7 @@ const pollsReducer = function(state, action) {
         }
       });
 
-    case "UPDATE-SEARCH":
+    case types.UPDATE_SEARCH:
       return Object.assign({}, {
         searchBar: {
           search: action.search
