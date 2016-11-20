@@ -1,6 +1,8 @@
+const types = require("../actions/action-manifest");
+
 const loginReducer = function(state, action) {
   switch(action.type) {
-    case "UPDATE-LOGIN-INPUT":
+    case types.UPDATE_LOGIN_INPUT:
       return Object.assign({}, {
         login: state.login,
         emailForm: {
@@ -9,7 +11,7 @@ const loginReducer = function(state, action) {
         }
       });
 
-    case "TOGGLE-EMAIL-FORM":
+    case types.TOGGLE_EMAIL_FORM:
       return Object.assign({}, {
         login: { emailOpen: !state.login.emailOpen },
         emailForm: state.emailForm

@@ -1,24 +1,26 @@
+const types = require("./action-manifest");
+
 const pollActions = {
   fetchPolls: function() {
     return {
-      type: "FETCH-POLLS"
+      type: types.FETCH_POLLS
     };
   },
   fetchSuccess: function(polls) {
     return {
-      type: "FETCH-SUCCESS",
+      type: types.FETCH_SUCCESS,
       polls: polls
     };
   },
   fetchError: function(error) {
     return {
-      type: "FETCH-ERROR",
+      type: types.FETCH_ERROR,
       error: error
     };
   },
   updateSearch: function(search) {
     return {
-      type: "UPDATE-SEARCH",
+      type: types.UPDATE_SEARCH,
       search: search
     };
   }

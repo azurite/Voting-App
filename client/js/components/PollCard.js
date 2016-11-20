@@ -3,7 +3,7 @@ const { Col } = require("react-bootstrap");
 
 const Poll = React.createClass({
   propTypes: {
-    data: React.PropTypes.array.isRequired
+    data: React.PropTypes.object.isRequired
   },
   render: function() {
     return (

@@ -5,84 +5,86 @@ const { Grid, Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, Chec
 const LoginButton = require("./AuthButton");
 const actions = require("../actions/login-actions");
 
-const EmailForm = function(props) {
-  return (
-    <div className={props.isOpen ? "panel show" : "panel"}>
-      <Form horizontal onSubmit={props.handleSubmit}>
+const EmailForm = React.createClass({
+  propTypes: {
+    isOpen: React.PropTypes.bool.isRequired,
+    email: React.PropTypes.string.isRequired,
+    password: React.PropTypes.string.isRequired,
+    handleChange: React.PropTypes.func.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired
+  },
+  render: function() {
+    return (
+      <div className={this.props.isOpen ? "panel show" : "panel"}>
+        <Form horizontal onSubmit={this.props.handleSubmit}>
 
-        <FormGroup controlId="nativeEmail">
-          <Col componentClass={ControlLabel} sm={2}>
-            Email
+          <FormGroup controlId="nativeEmail">
+            <Col componentClass={ControlLabel} sm={2}>
+              Email
+            </Col>
+            <Col sm={10}>
+              <FormControl type="email" placeholder="Email" value={this.props.email} onChange={this.props.handleChange}/>
+            </Col>
+          </FormGroup>
+
+          <FormGroup controlId="nativePassword">
+            <Col componentClass={ControlLabel} sm={2}>
+              Password
+            </Col>
+            <Col sm={10}>
+              <FormControl type="password" placeholder="Password" value={this.props.password} onChange={this.props.handleChange}/>
+            </Col>
+          </FormGroup>
+
+          <FormGroup>
+            <Col sm={10} smOffset={2}>
+              <Checkbox>Remember Me</Checkbox>
+            </Col>
+          </FormGroup>
+
+          <FormGroup>
+            <Col sm={10} smOffset={2}>
+              <Button type="submit">Login</Button>
+            </Col>
+          </FormGroup>
+
+        </Form>
+      </div>
+    );
+  }
+});
+
+const Login = React.createClass({
+  propTypes: {
+    emailOpen: React.PropTypes.bool.isRequired,
+    email: React.PropTypes.string.isRequired,
+    password: React.PropTypes.string.isRequired,
+    handleChange: React.PropTypes.func.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired,
+    toggleEmailForm: React.PropTypes.func.isRequired,
+    login: React.PropTypes.func.isRequired
+  },
+  render: function() {
+    return (
+      <Grid fluid>
+        <Row>
+          <Col md={4} sm={6} xs={8} mdOffset={4} smOffset={3} xsOffset={2}>
+            <LoginButton id="emailLogin" onClick={this.props.toggleEmailForm}>Login with Email</LoginButton>
+            <EmailForm
+              isOpen={this.props.emailOpen}
+              email={this.props.email}
+              password={this.props.password}
+              handleChange={this.props.handleChange}
+              handleSubmit={this.props.handleSubmit}
+            />
+            <LoginButton id="github" onClick={this.props.login}>Login with Github</LoginButton>
+            <LoginButton id="twitter" onClick={this.props.login}>Login with Twitter</LoginButton>
           </Col>
-          <Col sm={10}>
-            <FormControl type="email" placeholder="Email" value={props.email} onChange={props.handleChange}/>
-          </Col>
-        </FormGroup>
-
-        <FormGroup controlId="nativePassword">
-          <Col componentClass={ControlLabel} sm={2}>
-            Password
-          </Col>
-          <Col sm={10}>
-            <FormControl type="password" placeholder="Password" value={props.password} onChange={props.handleChange}/>
-          </Col>
-        </FormGroup>
-
-        <FormGroup>
-          <Col sm={10} smOffset={2}>
-            <Checkbox>Remember Me</Checkbox>
-          </Col>
-        </FormGroup>
-
-        <FormGroup>
-          <Col sm={10} smOffset={2}>
-            <Button type="submit">Login</Button>
-          </Col>
-        </FormGroup>
-
-      </Form>
-    </div>
-  );
-};
-
-EmailForm.propTypes = {
-  isOpen: React.PropTypes.bool.isRequired,
-  email: React.PropTypes.string.isRequired,
-  password: React.PropTypes.string.isRequired,
-  handleChange: React.PropTypes.func.isRequired,
-  handleSubmit: React.PropTypes.func.isRequired
-};
-
-const Login = function(props) {
-  return (
-    <Grid fluid>
-      <Row>
-        <Col md={4} sm={6} xs={8} mdOffset={4} smOffset={3} xsOffset={2}>
-          <LoginButton id="emailLogin" onClick={props.toggleEmailForm}>Login with Email</LoginButton>
-          <EmailForm
-            isOpen={props.emailOpen}
-            email={props.email}
-            password={props.password}
-            handleChange={props.handleChange}
-            handleSubmit={props.handleSubmit}
-          />
-          <LoginButton id="github" onClick={props.login}>Login with Github</LoginButton>
-          <LoginButton id="twitter" onClick={props.login}>Login with Twitter</LoginButton>
-        </Col>
-      </Row>
-    </Grid>
-  );
-};
-
-Login.propTypes = {
-  emailOpen: React.PropTypes.bool.isRequired,
-  email: React.PropTypes.string.isRequired,
-  password: React.PropTypes.string.isRequired,
-  toggleEmailForm: React.PropTypes.func.isRequired,
-  login: React.PropTypes.func.isRequired,
-  handleChange: React.PropTypes.func.isRequired,
-  handleSubmit: React.PropTypes.func.isRequired
-};
+        </Row>
+      </Grid>
+    );
+  }
+});
 
 const mapStateToProps = function(state) {
   return {
