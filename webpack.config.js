@@ -17,6 +17,8 @@ const PATHS = {
   backend: path.join(__dirname, "app")
 };
 
+const vendors = ["react", "react-dom", "react-router", "react-bootstrap", "react-router-bootstrap", "redux", "react-redux"];
+
 const common = {
   entry: {
     app: PATHS.app,
@@ -62,7 +64,7 @@ switch(process.env.npm_lifecycle_event) {
       },
       options.clean(PATHS.build.client),
       options.setFreeVariables(),
-      options.extractBundle({ name: "vendor", entries: ["react", "react-dom", "react-router", "redux", "react-redux"] }),
+      options.extractBundle({ name: "vendor", entries: vendors }),
       options.deduplicate(),
       options.minify(),
       options.htmlPlugin({ template: PATHS.template }),

@@ -12,6 +12,10 @@ html(lang="en")
   body
     #app!= app
 
+    if preloadedState
+      script.
+        window.__PRELOADED_STATE__ = !{JSON.stringify(preloadedState)}
+
     if assets && assets.scripts
       each asset in assets.scripts
         script(type="text/javascript" src=asset)

@@ -1,6 +1,10 @@
 const React = require("react");
 const { Col } = require("react-bootstrap");
 
+function format(date) {
+  return new Date(date).toString().split(" ").slice(0, -2).join(" ");
+}
+
 const Poll = React.createClass({
   propTypes: {
     data: React.PropTypes.object.isRequired
@@ -9,13 +13,9 @@ const Poll = React.createClass({
     return (
       <Col md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
         <div className="pollcard">
-          <h1>{this.props.data.body.title}</h1>
-          <ul>
-            {this.props.data.body.options.map((opt, i) => {
-              return (<li key={i}>{opt.option + ": " + opt.votes}</li>);
-            })}
-          </ul>
-          <h4>{"from: " + this.props.data.author}</h4>
+          <h3 className="text-center">{this.props.data.body.title}</h3>
+          <span>{"Created by: " + this.props.data.author}</span>
+          <span className="pull-right">{"Created at: " + format(this.props.data.createdAt)}</span>
         </div>
       </Col>
     );

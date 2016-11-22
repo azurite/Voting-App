@@ -6,7 +6,5 @@ Buglist:
 
 -------------------------------------------------------------------------------
 Todolist:
-- Complete Poll Card
 - Complete Poll Detail View (new child route)
-- Migrate state management to redux (underway)
 -------------------------------------------------------------------------------
