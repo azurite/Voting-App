@@ -1,12 +1,46 @@
 /*
  * Grabs the location of all assets generated from webpack at the designated destination
  * and returns them so that they can be included in the pug template for server side rendering
+ *
+ * the priorities option takes an array of names and for each asset that matches a key in the priorities object
+ * the assets will be sorted according lexicographically in the same order as the names provided
+ * this is useful if you need certain scripts to execute before another f.ex if you want you vendor scripts
+ * to be included before your app script you can pass:
+ *
+ *    priorities: {
+ *      scripts: ["vendor", "app"]
+ *    }
+ *
  */
 
 const fs = require("fs");
 const path = require("path");
 
-module.exports = function(options) {
+const sortByNamePriority = function(priorities, assets) {
+
+  for(var name in priorities) {
+    if(priorities.hasOwnProperty(name)) {
+      var arrcopy = assets[name].slice(0);
+      const sorted = [];
+
+      priorities[name].forEach((name) => {
+        const tester = new RegExp(name);
+
+        for(var i = 0; i < arrcopy.length; i++) {
+          if(tester.test(arrcopy[i])) {
+            Array.prototype.push.apply(sorted, arrcopy.splice(i, 1));
+          }
+        }
+      });
+
+      assets[name] = sorted;
+    }
+  }
+
+  return assets;
+};
+
+const serveBundles = function(options) {
   const fullpath = path.join(options.root, options.path);
   const assets = {
     styles: [],
@@ -28,5 +62,11 @@ module.exports = function(options) {
       }
     });
 
+  if(options.sort) {
+    return sortByNamePriority(options.sort , assets);
+  }
+
   return assets;
 };
+
+module.exports = serveBundles;

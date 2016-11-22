@@ -1,133 +1,19 @@
 const React = require("react");
+const { connect } = require("react-redux");
 const { Grid, Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, HelpBlock } = require("react-bootstrap");
-const RegisterButton = require("./AuthButton");
 
-const MAX_LENGTH = 8;
+const RegisterButton = require("./AuthButton");
+const actions = require("../actions/register-actions");
 
 const Register = React.createClass({
-  getInitialState: function() {
-    // null=neutral, false=error, true=success
-    return {
-      email: {
-        value: "",
-        isValid: null
-      },
-      password: {
-        value: "",
-        isValid: null
-      },
-      password_confirm: {
-        value: "",
-        isValid: null
-      }
-    };
-  },
-  getValidationState: function(input) {
-    if(input.value === "" || input.isValid === null) {
-      return null;
-    }
-    if(input.isValid) {
-      return "success";
-    }
-    return "error";
-  },
-  validate: function(type) {
-    switch(type) {
-      case "email": {
-        const email = this.state.email.value;
-        const valid = /[^\s@]+@[^\s@]+\.[^\s@]+/.test(email);
-        if(valid) {
-          this.setState({
-            email: {
-              value: email,
-              isValid: true
-            }
-          });
-        }
-        else {
-          this.setState({
-            email: {
-              value: email,
-              isValid: email === "" ? null : false
-            }
-          });
-        }
-        break;
-      }
-
-      case "password": {
-        const pw = this.state.password.value;
-        const confirm_pw = this.state.password_confirm.value;
-        if(pw.length >= MAX_LENGTH) {
-          this.setState({
-            password: {
-              value: pw,
-              isValid: true
-            }
-          });
-        }
-        else {
-          this.setState({
-            password: {
-              value: pw,
-              isValid: pw === "" ? null : false
-            }
-          });
-        }
-
-        if(pw === confirm_pw) {
-          this.setState({
-            password_confirm: {
-              value: confirm_pw,
-              isValid: true
-            }
-          });
-        }
-        else {
-          this.setState({
-            password_confirm: {
-              value: confirm_pw,
-              isValid: confirm_pw === "" ? null : false
-            }
-          });
-        }
-        break;
-      }
-    }
-  },
-  handleChange: function(e) {
-    switch(e.target.id) {
-      case "registerEmail":
-        this.setState({
-          email: {
-            value: e.target.value,
-            isValid: this.state.email.isValid
-          }
-        });
-        break;
-
-      case "registerPassword":
-        this.setState({
-          password: {
-            value: e.target.value,
-            isValid: this.state.password.isValid
-          }
-        });
-        break;
-
-      case "registerPasswordConfirm":
-        this.setState({
-          password_confirm: {
-            value: e.target.value,
-            isValid: this.state.password_confirm.isValid
-          }
-        });
-        break;
-    }
-    return false;
-  },
-  handleSubmit: function() {
-    //check if user input is !== "" and if it is valid befor submitting
+  propTypes: {
+    getValidationState: React.PropTypes.func.isRequired,
+    email: React.PropTypes.object.isRequired,
+    password: React.PropTypes.object.isRequired,
+    password_confirm: React.PropTypes.object.isRequired,
+    handleChange: React.PropTypes.func.isRequired,
+    validate: React.PropTypes.func.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired
   },
   render: function() {
     return (
@@ -135,9 +21,9 @@ const Register = React.createClass({
         <Row>
           <Col md={4} sm={6} mdOffset={4} smOffset={3}>
             <RegisterButton>Register</RegisterButton>
-            <Form horizontal id="registerAccount" onSubmit={this.handleSubmit}>
+            <Form horizontal id="registerAccount" onSubmit={this.props.handleSubmit}>
 
-              <FormGroup controlId="registerEmail" validationState={this.getValidationState(this.state.email)}>
+              <FormGroup controlId="registerEmail" validationState={this.props.getValidationState(this.props.email)}>
                 <Col componentClass={ControlLabel} sm={2}>
                   Email
                 </Col>
@@ -145,14 +31,14 @@ const Register = React.createClass({
                   <FormControl
                     type="email"
                     placeholder="Email"
-                    value={this.state.email.value}
-                    onChange={this.handleChange}
-                    onBlur={this.validate.bind(this, "email")}/>
-                  {this.state.email.isValid === false ? <HelpBlock>Invalid Email Address</HelpBlock> : null}
+                    value={this.props.email.value}
+                    onChange={this.props.handleChange}
+                    onBlur={this.props.validate.bind(this, "email")}/>
+                  {this.props.email.isValid === false ? <HelpBlock>Invalid Email Address</HelpBlock> : null}
                 </Col>
               </FormGroup>
 
-              <FormGroup controlId="registerPassword" validationState={this.getValidationState(this.state.password)}>
+              <FormGroup controlId="registerPassword" validationState={this.props.getValidationState(this.props.password)}>
                 <Col componentClass={ControlLabel} sm={2}>
                   Password
                 </Col>
@@ -160,22 +46,22 @@ const Register = React.createClass({
                   <FormControl
                     type="password"
                     placeholder="Password"
-                    value={this.state.password.value}
-                    onChange={this.handleChange}
-                    onBlur={this.validate.bind(this, "password")}/>
-                  {this.state.password.isValid === false ? <HelpBlock>min 8 characters</HelpBlock> : null}
+                    value={this.props.password.value}
+                    onChange={this.props.handleChange}
+                    onBlur={this.props.validate.bind(this, "password")}/>
+                  {this.props.password.isValid === false ? <HelpBlock>min 8 characters</HelpBlock> : null}
                 </Col>
               </FormGroup>
 
-              <FormGroup controlId="registerPasswordConfirm" validationState={this.getValidationState(this.state.password_confirm)}>
+              <FormGroup controlId="registerPasswordConfirm" validationState={this.props.getValidationState(this.props.password_confirm)}>
                 <Col sm={10} smOffset={2}>
                   <FormControl
                     type="password"
                     placeholder="confirm password"
-                    value={this.state.password_confirm.value}
-                    onChange={this.handleChange}
-                    onBlur={this.validate.bind(this, "password")}/>
-                  {this.state.password_confirm.isValid === false ? <HelpBlock>Passwords don't match</HelpBlock> : null}
+                    value={this.props.password_confirm.value}
+                    onChange={this.props.handleChange}
+                    onBlur={this.props.validate.bind(this, "password_confirm")}/>
+                  {this.props.password_confirm.isValid === false ? <HelpBlock>Passwords don't match</HelpBlock> : null}
                 </Col>
               </FormGroup>
 
@@ -193,4 +79,46 @@ const Register = React.createClass({
   }
 });
 
-module.exports = Register;
+const mapStateToProps = function(state) {
+  return {
+    getValidationState: function(input) {
+      return input.isValid === null ? null : (input.isValid ? "success" : "error");
+    },
+    email: state.register.email,
+    password: state.register.password,
+    password_confirm: state.register.password_confirm
+  };
+};
+
+const mapDispatchToProps = function(dispatch) {
+  return {
+    handleChange: function(e) {
+      switch(e.target.id) {
+        case "registerEmail":
+          dispatch(actions.updateInput("email", e.target.value));
+          break;
+
+        case "registerPassword":
+          dispatch(actions.updateInput("password", e.target.value));
+          break;
+
+        case "registerPasswordConfirm":
+          dispatch(actions.updateInput("password_confirm", e.target.value));
+          break;
+      }
+    },
+    validate: function(field) {
+      dispatch(actions.validateInput(field));
+    },
+    handleSubmit: function(e) {
+      e.preventDefault();
+    }
+  };
+};
+
+const RegisterContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Register);
+
+module.exports = RegisterContainer;

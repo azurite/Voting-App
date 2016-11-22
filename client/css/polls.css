@@ -4,5 +4,24 @@
 }
 
 .pollcard {
-  border: 1px solid black;
+  margin: 5px;
+  padding: 12px;
+  border: 5px solid #34495E;
+  border-radius: 10px;
+  background: lightsteelblue;
+  background: -webkit-linear-gradient(141deg, #E7E7E7, lightsteelblue);
+  background: -moz-linear-gradient(141deg, #E7E7E7, lightsteelblue);
+  background: linear-gradient(141deg, lightsteelblue, #E7E7E7);
+  -webkit-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
+  -moz-box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
+  box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.6);
+}
+
+.pollcard h3 {
+  padding-bottom: 5px;
+  color: #34496E;
+}
+
+.pollcard span {
+  display: inline-block;
 }

@@ -10,5 +10,8 @@ config/.env
 #webpack builds
 build
 
+#test code
+tests
+
 #log files
 *.log
