@@ -17,7 +17,15 @@ const PATHS = {
   backend: path.join(__dirname, "app")
 };
 
-const vendors = ["react", "react-dom", "react-router", "react-bootstrap", "react-router-bootstrap", "redux", "react-redux"];
+const vendors = [
+  "react",
+  "react-dom",
+  "react-router",
+  "react-bootstrap",
+  "react-router-bootstrap",
+  "redux",
+  "react-redux"
+];
 
 const common = {
   entry: {
@@ -26,6 +34,7 @@ const common = {
   },
   output: {
     path: PATHS.build.client,
+    publicPath: "/",
     filename: "[name].js"
   },
   resolve: {
@@ -39,7 +48,7 @@ switch(process.env.npm_lifecycle_event) {
   case "start:dev":
     config = merge(
       common,
-      { devtool: "eval-source-map" },
+      { devtool: "source-map" },
       options.htmlPlugin({ template: PATHS.template }),
       options.pugLoader({ include: PATHS.client }),
       options.babelLoader({ include: PATHS.app }),
@@ -67,7 +76,7 @@ switch(process.env.npm_lifecycle_event) {
       options.extractBundle({ name: "vendor", entries: vendors }),
       options.deduplicate(),
       options.minify(),
-      options.htmlPlugin({ template: PATHS.template }),
+      //options.htmlPlugin({ template: PATHS.template }),
       options.pugLoader({ include: PATHS.client }),
       options.babelLoader({ include: PATHS.app }),
       options.extractCSS({ include: PATHS.style, chunkhash: true }),

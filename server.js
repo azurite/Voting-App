@@ -5,10 +5,13 @@ const express = require("express");
 const app = express();
 
 const serveStatic = require("serve-static");
+const logger = require("connect-logger");
 const configureRoutes = require("./app/routes");
 
 app.set("view engine", "pug");
 app.set("views", path.join(process.cwd(), "client"));
+
+app.use(logger());
 app.use(serveStatic(path.join(process.cwd(), "build", "client")));
 
 configureRoutes(app);

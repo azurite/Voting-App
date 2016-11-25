@@ -1,0 +1,11 @@
+.piechart {
+  border: 1px solid black;
+}
+
+#pollDetail {
+  margin-top: 25px;
+}
+
+.poll-detail-view span {
+  display: inline-block;
+}

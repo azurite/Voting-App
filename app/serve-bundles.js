@@ -2,12 +2,12 @@
  * Grabs the location of all assets generated from webpack at the designated destination
  * and returns them so that they can be included in the pug template for server side rendering
  *
- * the priorities option takes an array of names and for each asset that matches a key in the priorities object
+ * the sort option takes an array of names and for each asset that matches a key in the sort object
  * the assets will be sorted according lexicographically in the same order as the names provided
  * this is useful if you need certain scripts to execute before another f.ex if you want you vendor scripts
  * to be included before your app script you can pass:
  *
- *    priorities: {
+ *    sort: {
  *      scripts: ["vendor", "app"]
  *    }
  *
@@ -42,6 +42,7 @@ const sortByNamePriority = function(priorities, assets) {
 
 const serveBundles = function(options) {
   const fullpath = path.join(options.root, options.path);
+  const publicPath = options.publicPath || "";
   const assets = {
     styles: [],
     scripts: []
@@ -55,10 +56,10 @@ const serveBundles = function(options) {
     })
     .forEach((file) => {
       if(file.slice(file.lastIndexOf(".")) === ".css") {
-        assets.styles.push(file);
+        assets.styles.push(publicPath + file);
       }
       if(file.slice(file.lastIndexOf(".")) === ".js") {
-        assets.scripts.push(file);
+        assets.scripts.push(publicPath + file);
       }
     });
 

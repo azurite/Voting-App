@@ -66,7 +66,7 @@ const Login = React.createClass({
   },
   render: function() {
     return (
-      <Grid fluid>
+      <Grid fluid className="container-aug">
         <Row>
           <Col md={4} sm={6} xs={8} mdOffset={4} smOffset={3} xsOffset={2}>
             <LoginButton id="emailLogin" onClick={this.props.toggleEmailForm}>Login with Email</LoginButton>
