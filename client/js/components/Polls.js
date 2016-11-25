@@ -46,19 +46,33 @@ const Polls = React.createClass({
     searchValue: React.PropTypes.string.isRequired,
     pollData: React.PropTypes.object.isRequired,
     fetchPolls: React.PropTypes.func.isRequired,
-    renderPolls: React.PropTypes.func.isRequired,
     updateSearch: React.PropTypes.func.isRequired,
     children: React.PropTypes.node
   },
+  renderPolls: function(polls) {
+    if(polls.isFetching) {
+      return (<Loading size="fa-3x"/>);
+    }
+    if(polls.fetchSuccess) {
+      const Polls = polls.polldata.map((poll, index) => {
+        return (<Poll key={index} data={poll}/>);
+      });
+      return (<Row>{Polls}</Row>);
+    }
+    if(polls.fetchError) {
+      //display useful error component
+      return (<p>error fetching polls</p>);
+    }
+  },
   render: function() {
     return (
-      <Grid fluid>
+      <Grid fluid className="container-aug">
         <SearchBar
           submitSearch={this.props.fetchPolls}
           searchValue={this.props.searchValue}
           handleChange={this.props.updateSearch}
         />
-        {this.props.renderPolls(this.props.pollData)}
+        {this.renderPolls(this.props.pollData)}
       </Grid>
     );
   }
@@ -87,21 +101,6 @@ const mapDispatchToProps = function(dispatch) {
     },
     updateSearch: function(e) {
       dispatch(actions.updateSearch(e.target.value));
-    },
-    renderPolls: function renderPolls(polls) {
-      if(polls.isFetching) {
-        return (<Loading size="fa-3x"/>);
-      }
-      if(polls.fetchSuccess) {
-        const Polls = polls.polldata.map((poll, index) => {
-          return (<Poll key={index} data={poll}/>);
-        });
-        return (<Row>{Polls}</Row>);
-      }
-      if(polls.fetchError) {
-        //display useful error component
-        return (<p>error fetching polls</p>);
-      }
     }
   };
 };

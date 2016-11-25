@@ -17,7 +17,7 @@ const Register = React.createClass({
   },
   render: function() {
     return (
-      <Grid fluid>
+      <Grid fluid className="container-aug">
         <Row>
           <Col md={4} sm={6} mdOffset={4} smOffset={3}>
             <RegisterButton>Register</RegisterButton>

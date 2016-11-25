@@ -11,7 +11,7 @@ const MEDIA = (function(env) {
 const Home = React.createClass({
   render: function() {
     return (
-      <Grid fluid>
+      <Grid fluid className="container-aug">
 
         <Row>
           <Col md={8} mdOffset={2}>

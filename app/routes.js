@@ -10,6 +10,7 @@ const routes = require("../client/js/routes");
 const assets = require("./serve-bundles.js")({
   root: process.cwd(),
   path: "/build/client",
+  publicPath: "/",
   sort: {
     scripts: ["manifest", "vendor", "style", "app"]
   }

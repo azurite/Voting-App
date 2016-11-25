@@ -3,6 +3,7 @@
 @import url("./login.css");
 @import url("./register.css");
 @import url("./polls.css");
+@import url("./poll.css");
 
 body {
   background-color: #E7E7E7;
@@ -10,6 +11,10 @@ body {
 
 :focus {
   outline: none !important;
+}
+
+.container-aug {
+  margin-bottom: 55px;
 }
 
 .copy {
