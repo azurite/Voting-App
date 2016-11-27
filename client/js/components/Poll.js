@@ -15,11 +15,7 @@ const PieChart = React.createClass({
     if(this.props.polldata) {
       d3Chart.create(
         this.d3chart,
-        {
-          width: 300,
-          height: 300,
-          radius: 150
-        },
+        { width: 300, height: 320, radius: 150 },
         this.props.polldata
       );
     }
@@ -90,11 +86,13 @@ const Poll = React.createClass({
     return (
       <Grid fluid className="container-aug">
         <Row>
-          <Col md={4} sm={4} xs={10} mdOffset={1} smOffset={1} xsOffset={1}>
-            <PieChart polldata={this.props.polldata}/>
-          </Col>
-          <Col md={6} sm={6} xs={10} mdOffset={0} smOffset={0} xsOffset={1}>
-            <PollDetails polldata={this.props.polldata} submitVote={this.props.submitVote}/>
+          <Col className="poll-container" xs={10} xsOffset={1}>
+            <Col md={5} sm={5} xs={10} mdOffset={0} smOffset={0} xsOffset={1}>
+              <PieChart polldata={this.props.polldata}/>
+            </Col>
+            <Col md={5} sm={5} xs={10} mdOffset={1} smOffset={1} xsOffset={1}>
+              <PollDetails polldata={this.props.polldata} submitVote={this.props.submitVote}/>
+            </Col>
           </Col>
         </Row>
       </Grid>

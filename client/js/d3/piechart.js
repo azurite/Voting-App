@@ -1,3 +1,7 @@
+/*
+ * chart design inspired by by: https://bl.ocks.org/mbostock/3887235
+*/
+
 const d3 = require("d3");
 
 const chart = {
@@ -8,17 +12,18 @@ const chart = {
       .attr("width", props.width)
       .attr("height", props.height)
     .append("g")
-      .attr("transform", "translate(" + props.width / 2 + "," + props.height / 2 + ")");
+      .attr("transform", "translate(" + props.width / 2 + "," + (props.height - 20) / 2 + ")");
 
-    var tooltip = d3.select(root).append("div")
-      .attr("class", "tooltip")
-      .style("diaplay", "none");
+    var tip = d3.select("svg").append("text")
+      .attr("transform", "translate(" + (props.width / 2) + "," + (props.height - 15) + ")")
+      .attr("text-anchor", "middle")
+      .attr("dy", "0.35em");
 
     this.svg = svg;
     this.options = props;
     this.data = data;
     this.root = root;
-    this.tooltip = tooltip;
+    this.tip = tip;
 
     this.drawChart();
   },
@@ -35,21 +40,34 @@ const chart = {
       .outerRadius(this.options.radius - 10)
       .innerRadius(0);
 
+    var labelArc = d3.arc()
+      .outerRadius(this.options.radius - 40)
+      .innerRadius(this.options.radius - 40);
+
     var pie = d3.pie()
       .sort(null)
       .value((d) => { return d.votes; });
 
     var g = this.svg.selectAll(".arc")
-      .data(pie(this.data.body.options))
+      .data(pie(this.data.body.options.filter((d) => { return d.votes > 0; })))
     .enter().append("g")
       .attr("class", "arc");
 
-    g.append("path")
+    g
+      .append("path")
       .attr("d", arc)
       .style("fill", () => { return colors[this.cycle.increment()]; });
 
-    g.on("mouseover", this.showToolTip.bind(this))
-      .on("mouseout", this.hideToolTip.bind(this));
+    g.append("text")
+      .attr("transform", (d) => { return "translate(" + labelArc.centroid(d) + ")"; })
+      .attr("dy", "0.35em")
+      .attr("text-anchor", "middle")
+      .text((d) => { return Math.round(100 * d.data.votes / this.data.body.totalVotes) + "%"; });
+
+    g
+      .on("mouseover", this.updateTip.bind(this))
+      .on("mouseout", this.hideTip.bind(this))
+      .on("click", this.updateTip.bind(this));
   },
   destroy: function() {
     d3.select("svg").remove();
@@ -57,16 +75,11 @@ const chart = {
   update: function(newData) {
     this.drawChart(newData);
   },
-  showToolTip: function(d) {
-    this.tooltip.style("display", "block")
-      .style("top", d3.event.pageY + "px")
-      .style("left", d3.event.pageX + "px");
-
-    this.tooltip.html("<span>" + d.data.option + "</span>");
+  hideTip: function() {
+    this.tip.text("");
   },
-  hideToolTip: function() {
-    this.tooltip.style("display", "none");
-    this.tooltip.html("");
+  updateTip: function(d) {
+    this.tip.text(d.data.option);
   },
   cycle: {
     data: 0,
@@ -81,7 +94,7 @@ const chart = {
     increment: function() {
 
       var curr = this.data;
-      this.data > (this.length - 1) ? this.data = 0 : this.data += 1;
+      this.data >= (this.length - 1) ? this.data = 0 : this.data += 1;
       return curr;
     }
   }
