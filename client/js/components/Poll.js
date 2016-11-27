@@ -1,22 +1,37 @@
 const React = require("react");
 const { connect } = require("react-redux");
 const { Grid, Row, Col, Button, Form, FormControl, FormGroup, ControlLabel } = require("react-bootstrap");
+const d3Chart = require("../d3/piechart");
 
 function format(date) {
   return new Date(date).toString().split(" ").slice(0, -2).join(" ");
 }
 
-const Poll = React.createClass({
+const PieChart = React.createClass({
   propTypes: {
-    params: React.PropTypes.object,
-    polldata: React.PropTypes.object,
-    submitVote: React.PropTypes.func.isRequired
+    polldata: React.PropTypes.object
   },
-  renderPieChart: function() {
+  componentDidMount: function() {
+    if(this.props.polldata) {
+      d3Chart.create(
+        this.d3chart,
+        {
+          width: 300,
+          height: 300,
+          radius: 150
+        },
+        this.props.polldata
+      );
+    }
+  },
+  componentWillUnmount: function() {
+    d3Chart.destroy();
+  },
+  render: function() {
     const poll = this.props.polldata;
     if(poll) {
       return (
-        <p className="text-center">Poll graphic</p>
+        <div className="svg-container" ref={(node) => { this.d3chart = node; }}></div>
       );
     }
     else {
@@ -24,8 +39,15 @@ const Poll = React.createClass({
         <p className="text-center">No grahpic can be displayed</p>
       );
     }
+  }
+});
+
+const PollDetails = React.createClass({
+  propTypes: {
+    polldata: React.PropTypes.object,
+    submitVote: React.PropTypes.func.isRequired
   },
-  renderPollDetails: function() {
+  render: function() {
     const poll = this.props.polldata;
     if(poll) {
       return (
@@ -36,8 +58,8 @@ const Poll = React.createClass({
             <FormGroup controlId="pollSelect">
               <ControlLabel>Select an option</ControlLabel>
               <FormControl componentClass="select">
-                {poll.body.options.map((opt) => {
-                  return (<option value={opt.option}>{opt.option}</option>);
+                {poll.body.options.map((opt, i) => {
+                  return (<option key={i} value={opt.option}>{opt.option}</option>);
                 })}
               </FormControl>
             </FormGroup>
@@ -55,16 +77,24 @@ const Poll = React.createClass({
         <p className="text-center">Sorry but this poll doesnt exist in our database</p>
       );
     }
+  }
+});
+
+const Poll = React.createClass({
+  propTypes: {
+    params: React.PropTypes.object,
+    polldata: React.PropTypes.object,
+    submitVote: React.PropTypes.func.isRequired
   },
   render: function() {
     return (
       <Grid fluid className="container-aug">
         <Row>
-          <Col md={4} sm={4} xs={10} mdOffset={1} smOffset={1} xsOffset={1} className="piechart">
-            {this.renderPieChart()}
+          <Col md={4} sm={4} xs={10} mdOffset={1} smOffset={1} xsOffset={1}>
+            <PieChart polldata={this.props.polldata}/>
           </Col>
-          <Col md={6} sm={6} xs={10} mdOffset={0} smOffset={0} xsOffset={1} className="polldetail">
-            {this.renderPollDetails()}
+          <Col md={6} sm={6} xs={10} mdOffset={0} smOffset={0} xsOffset={1}>
+            <PollDetails polldata={this.props.polldata} submitVote={this.props.submitVote}/>
           </Col>
         </Row>
       </Grid>

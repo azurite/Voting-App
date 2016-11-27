@@ -24,7 +24,8 @@ const vendors = [
   "react-bootstrap",
   "react-router-bootstrap",
   "redux",
-  "react-redux"
+  "react-redux",
+  "d3"
 ];
 
 const common = {
