@@ -17,7 +17,10 @@ module.exports = {
     emailForm: {
       email: "",
       password: ""
-    }
+    },
+    reqPending: false,
+    user: null,
+    err: null
   },
   register: {
     email: {
@@ -32,5 +35,5 @@ module.exports = {
       value: "",
       isValid: null
     }
-  }
+  },
 };

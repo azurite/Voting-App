@@ -102,9 +102,18 @@ const Poll = React.createClass({
 
 const mapStateToProps = function(state, ownProps) {
   return {
-    polldata: state.polls.polls.polldata.find((p) => {
-      return p.id === parseInt(ownProps.params.pollId, 10);
-    })
+    polldata: (function() {
+      var polldata = state.polls.polls.polldata.find((p) => {
+        return p.id === parseInt(ownProps.params.pollId, 10);
+      });
+
+      if(!polldata && state.login.user) {
+        polldata = state.login.user.ownPolls.find((p) => {
+          return p.id === parseInt(ownProps.params.pollId, 10);
+        });
+      }
+      return polldata;
+    }())
   };
 };
 
