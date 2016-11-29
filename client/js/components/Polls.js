@@ -8,7 +8,6 @@ const actions = require("../actions/polls-actions");
 
 function pretendFetch(path, cb) {
   const polls = require("../dev/samplePolls");
-  //simulate a response with error = null and the data as the arguments of the callback
   setTimeout(cb, 1000, null, polls);
 }
 
@@ -55,7 +54,11 @@ const Polls = React.createClass({
     }
     if(polls.fetchSuccess) {
       const Polls = polls.polldata.map((poll, index) => {
-        return (<Poll key={index} data={poll}/>);
+        return (
+          <Col md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
+            <Poll key={index} data={poll}/>
+          </Col>
+        );
       });
       return (<Row>{Polls}</Row>);
     }

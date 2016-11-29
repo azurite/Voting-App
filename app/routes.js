@@ -22,7 +22,7 @@ const preloadedState = store.getState();
 module.exports = function(app) {
 
   app.get("*", (req, res) => {
-    match({ routes: routes, location: req.url  }, (err, redirect, props) => {
+    match({ routes: routes(store), location: req.url  }, (err, redirect, props) => {
       if(err) {
         res.status(500).send(err.message);
       }

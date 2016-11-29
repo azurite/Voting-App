@@ -24,7 +24,9 @@ const store = createStore(reducer, getInitialState());
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router routes={routes} history={browserHistory}/>
+    <Router history={browserHistory}>
+      {routes(store)}
+    </Router>
   </Provider>,
   document.getElementById("app")
 );
