@@ -1,12 +1,6 @@
 const React = require("react");
 const { Grid, Row, Col, Image } = require("react-bootstrap");
-
-const MEDIA = (function(env) {
-  if(env === "production") {
-    return "/media";
-  }
-  return "/client/media";
-}(process.env.NODE_ENV));
+const MEDIA = require("../utils/media");
 
 const Home = React.createClass({
   render: function() {

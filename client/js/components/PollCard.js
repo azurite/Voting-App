@@ -1,9 +1,6 @@
 const React = require("react");
 const { Link } = require("react-router");
-
-function format(date) {
-  return new Date(date).toString().split(" ").slice(0, -2).join(" ");
-}
+const format = require("../utils/format");
 
 const Poll = React.createClass({
   propTypes: {
