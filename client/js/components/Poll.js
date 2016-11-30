@@ -2,10 +2,7 @@ const React = require("react");
 const { connect } = require("react-redux");
 const { Grid, Row, Col, Button, Form, FormControl, FormGroup, ControlLabel } = require("react-bootstrap");
 const d3Chart = require("../d3/piechart");
-
-function format(date) {
-  return new Date(date).toString().split(" ").slice(0, -2).join(" ");
-}
+const format = require("../utils/format");
 
 const PieChart = React.createClass({
   propTypes: {

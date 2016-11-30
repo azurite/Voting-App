@@ -2,13 +2,7 @@ const React = require("react");
 const { Grid, Row, Col, Image, Button } = require("react-bootstrap");
 const { connect } = require("react-redux");
 const Poll = require("./PollCard");
-
-const MEDIA = (function(env) {
-  if(env === "production") {
-    return "/media";
-  }
-  return "/client/media";
-}(process.env.NODE_ENV));
+const MEDIA = require("../utils/media");
 
 const User = React.createClass({
   propTypes: {

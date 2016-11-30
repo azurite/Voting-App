@@ -6,7 +6,6 @@ Buglist:
 
 -------------------------------------------------------------------------------
 Todolist:
--Implement logout route which logs user out
 -Implement edit/create poll component={PollEditor}
 -Implement delete poll
 

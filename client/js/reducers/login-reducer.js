@@ -56,6 +56,15 @@ const loginReducer = function(state, action) {
         err: action.err
       });
 
+    case types.LOGOUT:
+      return Object.assign({}, {
+        login: state.login,
+        emailForm: state.emailForm,
+        reqPending: state.reqPending,
+        user: null,
+        err: state.err
+      });
+
     default:
       return state;
   }

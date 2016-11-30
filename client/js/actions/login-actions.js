@@ -29,6 +29,11 @@ const loginActions = {
       type: types.LOGIN_FAILURE,
       err: err
     };
+  },
+  logout: function() {
+    return {
+      type: types.LOGOUT
+    };
   }
 };
 
