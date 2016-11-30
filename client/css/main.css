@@ -4,6 +4,7 @@
 @import url("./register.css");
 @import url("./polls.css");
 @import url("./poll.css");
+@import url("./user.css");
 
 body {
   background-color: #E7E7E7;

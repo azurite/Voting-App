@@ -5,9 +5,18 @@ const { Grid, Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, Chec
 const LoginButton = require("./AuthButton");
 const actions = require("../actions/login-actions");
 
-function pretendLogin(path, cb) {
+function pretendLogin(path, creds, cb) {
   const user = require("../dev/sampleAccount");
-  setTimeout(cb, 1000, null, user);
+
+  if(creds.email === "example@email.com" && creds.password === "pass1") {
+    setTimeout(cb, 1000, null, user);
+  }
+  else if(creds.email === "" && creds.password === "") {
+    setTimeout(cb, 1000, null, user);
+  }
+  else {
+    setTimeout(cb, 1000, { message: "invalid username or password" }, null);
+  }
 }
 
 const EmailForm = React.createClass({
@@ -17,12 +26,16 @@ const EmailForm = React.createClass({
     password: React.PropTypes.string.isRequired,
     handleChange: React.PropTypes.func.isRequired,
     handleSubmit: React.PropTypes.func.isRequired,
-    reqPending: React.PropTypes.bool.isRequired
+    reqPending: React.PropTypes.bool.isRequired,
+    errmsg: React.PropTypes.object
+  },
+  onSubmit: function(e) {
+    this.props.handleSubmit(e, this.props.email, this.props.password);
   },
   render: function() {
     return (
       <div className={this.props.isOpen ? "panel show" : "panel"}>
-        <Form horizontal onSubmit={this.props.handleSubmit}>
+        <Form horizontal onSubmit={this.onSubmit}>
 
           <FormGroup controlId="nativeEmail">
             <Col componentClass={ControlLabel} sm={2}>
@@ -50,8 +63,9 @@ const EmailForm = React.createClass({
 
           <FormGroup>
             <Col sm={10} smOffset={2}>
-              <Button type="submit">Login</Button>
+              <Button type="submit" className="login-btn">Login</Button>
               {this.props.reqPending ? <i className="fa fa-spinner fa-spin"></i> : null}
+              {this.props.errmsg ? <span className="error-msg">{this.props.errmsg.message}</span> : null}
             </Col>
           </FormGroup>
 
@@ -70,7 +84,8 @@ const Login = React.createClass({
     handleSubmit: React.PropTypes.func.isRequired,
     toggleEmailForm: React.PropTypes.func.isRequired,
     login: React.PropTypes.func.isRequired,
-    reqPending: React.PropTypes.bool.isRequired
+    reqPending: React.PropTypes.bool.isRequired,
+    errmsg: React.PropTypes.object
   },
   render: function() {
     return (
@@ -87,6 +102,7 @@ const Login = React.createClass({
               handleChange={this.props.handleChange}
               handleSubmit={this.props.handleSubmit}
               reqPending={this.props.reqPending}
+              errmsg={this.props.errmsg}
             />
             <LoginButton id="github" onClick={this.props.login}>Login with Github</LoginButton>
             <LoginButton id="twitter" onClick={this.props.login}>Login with Twitter</LoginButton>
@@ -102,7 +118,8 @@ const mapStateToProps = function(state) {
     emailOpen: state.login.login.emailOpen,
     email: state.login.emailForm.email,
     password: state.login.emailForm.password,
-    reqPending: state.login.reqPending
+    reqPending: state.login.reqPending,
+    errmsg: state.login.err
   };
 };
 
@@ -127,13 +144,18 @@ const mapDispatchToProps = function(dispatch, ownProps) {
       }
       return false;
     },
-    handleSubmit: function(e) {
+    handleSubmit: function(e, email, password) {
       e.preventDefault();
       dispatch(actions.requestLogin());
 
-      pretendLogin("../dev/sampleAccount", function(err, user) {
+      var creds = {
+        email: email,
+        password: password
+      };
+
+      pretendLogin("../dev/sampleAccount", creds, function(err, user) {
         if(err) {
-          dispatch(actions.loginFailure({ message: "invalid username or password" }));
+          dispatch(actions.loginFailure(err));
           return;
         }
         dispatch(actions.loginSuccess(user));

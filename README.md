@@ -6,5 +6,10 @@ Buglist:
 
 -------------------------------------------------------------------------------
 Todolist:
+-Implement logout route which logs user out
+-Implement edit/create poll component={PollEditor}
+-Implement delete poll
 
+After those steps the front end can be considered done and I can move on to the
+Backend
 -------------------------------------------------------------------------------

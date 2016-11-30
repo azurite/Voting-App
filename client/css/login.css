@@ -29,3 +29,11 @@
   max-height: 300px;
   opacity: 1;
 }
+
+.login-btn {
+  margin-right: 10px;
+}
+
+.error-msg {
+  color: #ff0000;
+}
