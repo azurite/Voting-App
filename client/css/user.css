@@ -1,0 +1,23 @@
+.profile-img {
+  max-height: 150px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.user-poll-cards {
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+
+.pollcard-btn {
+  margin-left: 5px;
+}
+
+.create-poll-btn {
+
+}

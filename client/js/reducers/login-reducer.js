@@ -47,7 +47,10 @@ const loginReducer = function(state, action) {
     case types.LOGIN_FAILURE:
       return Object.assign({}, {
         login: state.login,
-        emailForm: state.emailForm,
+        emailForm: {
+          email: "",
+          password: ""
+        },
         reqPending: false,
         user: null,
         err: action.err
