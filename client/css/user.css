@@ -4,13 +4,6 @@
   margin-bottom: 10px;
 }
 
-/*still not sure if I want to implement this*/
-.user-poll-cards-container {
-  width: 100%;
-  max-height: 300px;
-  overflow: scroll;
-}
-
 .user-poll-cards {
   margin-top: 15px;
   margin-bottom: 20px;
@@ -27,4 +20,15 @@
 
 .create-poll-btn {
 
+}
+
+.poll-editor {
+  max-height: 0;
+  opacity: 0;
+  transition: 0.4s ease-in-out;
+}
+
+.poll-editor.show {
+  max-height: 100%;
+  opacity: 1;
 }

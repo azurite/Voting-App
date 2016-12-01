@@ -36,4 +36,17 @@ module.exports = {
       isValid: null
     }
   },
+  profile: {
+    editorOpen: false,
+    editorContent: {
+      title: "",
+      options: [],
+      newOption: ""
+    },
+    deleteDisabled: false,
+    createDisabled: false,
+    isSaving: false,
+    err: null,
+    success: null
+  }
 };
