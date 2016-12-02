@@ -1,5 +1,5 @@
 const React = require("react");
-const { Grid, Row, Col, Image, Button, Form, FormGroup, FormControl, ControlLabel } = require("react-bootstrap");
+const { Grid, Row, Col, Image, Button, FormGroup, InputGroup, FormControl, ControlLabel } = require("react-bootstrap");
 const { connect } = require("react-redux");
 const actions = require("../actions/profile-actions");
 const Poll = require("./PollCard");
@@ -9,44 +9,6 @@ function pretendSave(path, cb) {
   setTimeout(cb, 1000, null, { success: 1 });
 }
 
-const LiWrapper = React.createClass({
-  propTypes: {
-    data: React.PropTypes.object.isRequired,
-    removeOption: React.PropTypes.func.isRequired
-  },
-  removeOption: function() {
-    this.props.removeOption(this.props.data);
-  },
-  render: function() {
-    return (
-      <li>
-        {this.props.data.option}
-        <Button onClick={this.removeOption}>
-          <i className="fa fa-close"></i>
-        </Button>
-      </li>
-    );
-  }
-});
-
-const OptionList = React.createClass({
-  propTypes: {
-    options: React.PropTypes.array.isRequired,
-    removeOption: React.PropTypes.func.isRequired
-  },
-  render: function() {
-    return (
-      <ul>
-        {this.props.options.map((opt, i) => {
-          return (
-            <LiWrapper key={i + opt.option + opt.votes + Date.now() + ""} data={opt} removeOption={this.props.removeOption}/>
-          );
-        })}
-      </ul>
-    );
-  }
-});
-
 const PollEditor = React.createClass({
   propTypes: {
     content: React.PropTypes.object,
@@ -55,7 +17,9 @@ const PollEditor = React.createClass({
     saveEdit: React.PropTypes.func.isRequired,
     cancelEdit: React.PropTypes.func.isRequired,
     removeOption: React.PropTypes.func.isRequired,
-    addOption: React.PropTypes.func.isRequired
+    addOption: React.PropTypes.func.isRequired,
+    isSaving: React.PropTypes.bool.isRequired,
+    err: React.PropTypes.object
   },
   handleChange: function(e) {
     switch(e.target.id) {
@@ -76,36 +40,46 @@ const PollEditor = React.createClass({
     return (
       <Col xs={12}>
         <div className={this.props.showEditor ? "poll-editor show" : "poll-editor"}>
-          <Form onSubmit={this.props.saveEdit}>
-
             <FormGroup>
               <ControlLabel>Poll Title</ControlLabel>
-              <FormControl
-                type="text"
-                id="editPollTitle"
-                value={this.props.content.title}
-                onChange={this.handleChange}
-              />
+              <FormControl type="text" id="editPollTitle" value={this.props.content.title} onChange={this.handleChange}/>
             </FormGroup>
 
             <FormGroup>
               <ControlLabel>Add Option</ControlLabel>
-              <FormControl
-                type="text"
-                id="editPollOption"
-                value={this.props.content.newOption}
-                onChange={this.handleChange}
-              />
-              <Button onClick={this.addOption}>Add</Button>
+              <InputGroup>
+                <FormControl
+                  type="text"
+                  id="editPollOption"
+                  value={this.props.content.newOption}
+                  onChange={this.handleChange}
+                  onKeyPress={(e) => { e.which === 13 ? this.addOption() : false; }}
+                />
+                <InputGroup.Button>
+                  <Button onClick={this.addOption}>Add</Button>
+                </InputGroup.Button>
+              </InputGroup>
             </FormGroup>
-            <OptionList options={this.props.content.options} removeOption={this.props.removeOption}/>
+
+            <ul className="poll-editor-ul">
+              {this.props.content.options.map((opt, i) => {
+                return (
+                  <li className="poll-editor-li" key={i + opt.option + opt.votes}>
+                    {opt.option}
+                    <Button onClick={this.props.removeOption.bind(this, opt)}>
+                      <i className="fa fa-close"></i>
+                    </Button>
+                  </li>
+                );
+              })}
+            </ul>
 
             <FormGroup>
-              <Button type="submit">Save</Button>
-              <Button onClick={this.props.cancelEdit}>Cancel</Button>
+              <Button className="editor-btn" onClick={this.props.saveEdit}>Save</Button>
+              <Button className="editor-btn" onClick={this.props.cancelEdit}>Cancel</Button>
+              {this.props.isSaving ? <i className="fa fa-spinner fa-spin"></i> :
+              (this.props.err ? <span>{this.props.err.message}</span> : null)}
             </FormGroup>
-
-          </Form>
         </div>
       </Col>
     );
@@ -116,6 +90,10 @@ const User = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
     params: React.PropTypes.object,
+    editDisabled: React.PropTypes.bool.isRequired,
+    deleteDisabled: React.PropTypes.bool.isRequired,
+    createDisabled: React.PropTypes.bool.isRequired,
+    createPoll: React.PropTypes.func.isRequired,
     editPoll: React.PropTypes.func.isRequired,
     editorContent: React.PropTypes.object.isRequired,
     editorOpen: React.PropTypes.bool.isRequired,
@@ -123,10 +101,12 @@ const User = React.createClass({
     saveEdit: React.PropTypes.func.isRequired,
     cancelEdit: React.PropTypes.func.isRequired,
     removeOption: React.PropTypes.func.isRequired,
-    addOption: React.PropTypes.func.isRequired
+    addOption: React.PropTypes.func.isRequired,
+    isSaving: React.PropTypes.bool.isRequired,
+    err: React.PropTypes.object
   },
   deletePoll: function() {
-    //poll as firts argument
+    //poll as first argument
     //make delete ajax request here
   },
   renderPolls: function() {
@@ -141,8 +121,19 @@ const User = React.createClass({
       return (
         <Col xs={12} key={i} className="user-poll-cards">
           <Poll data={poll}/>
-          <Button className="pollcard-btn" onClick={this.props.editPoll.bind(this, poll)}>Edit</Button>
-          <Button className="pollcard-btn" bsStyle="danger" onClick={this.deletePoll.bind(this, poll)}>Delete</Button>
+          <Button
+            className="pollcard-btn"
+            onClick={this.props.editPoll.bind(this, poll)}
+            disabled={this.props.editDisabled}>
+            Edit
+          </Button>
+          <Button
+            className="pollcard-btn"
+            bsStyle="danger"
+            onClick={this.deletePoll.bind(this, poll)}
+            disabled={this.props.deleteDisabled}>
+            Delete
+          </Button>
         </Col>
       );
     });
@@ -172,7 +163,12 @@ const User = React.createClass({
 
             <Row>
               <Col xs={12}>
-                <Button className="create-poll-btn">Create Poll</Button>
+                <Button
+                  className="create-poll-btn"
+                  onClick={this.props.createPoll}
+                  disabled={this.props.createDisabled}>
+                  Create Poll
+                </Button>
               </Col>
             </Row>
 
@@ -185,6 +181,8 @@ const User = React.createClass({
                 cancelEdit={this.props.cancelEdit}
                 removeOption={this.props.removeOption}
                 addOption={this.props.addOption}
+                isSaving={this.props.isSaving}
+                err={this.props.err}
               />
             </Row>
           </Col>
@@ -207,7 +205,12 @@ const mapStateToProps = function(state) {
   return {
     user: state.login.user,
     editorContent: state.profile.editorContent,
-    editorOpen: state.profile.editorOpen
+    editorOpen: state.profile.editorOpen,
+    editDisabled: state.profile.editDisabled,
+    deleteDisabled: state.profile.deleteDisabled,
+    createDisabled: state.profile.createDisabled,
+    isSaving: state.profile.isSaving,
+    err: state.profile.err
   };
 };
 
@@ -216,11 +219,13 @@ const mapDispatchToProps = function(dispatch) {
     updatePollInput: function(field, input) {
       dispatch(actions.updatePollInput(field, input));
     },
+    createPoll: function() {
+      dispatch(actions.createPoll());
+    },
     editPoll: function(poll) {
       dispatch(actions.editPoll(poll));
     },
-    saveEdit: function(e) {
-      e.preventDefault();
+    saveEdit: function() {
       dispatch(actions.saveEdit());
       pretendSave("/path/to/api/route", function(err, status) {
         if(err) {
@@ -239,17 +244,18 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(actions.removeOption(opt));
     },
     addOption: function(option) {
-      dispatch(actions.addOption({
-        option: option,
-        votes: 0
-      }));
+      if(option.trim() !== "") {
+        dispatch(actions.addOption({ option: option, votes: 0 }));
+      }
     }
   };
 };
 
 const UserContainer = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  null,
+  { pure: false }
 )(User);
 
 module.exports = UserContainer;

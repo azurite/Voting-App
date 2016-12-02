@@ -1,6 +1,11 @@
 const types = require("./action-manifest");
 
 const profileActions = {
+  createPoll: function() {
+    return {
+      type: types.CREATE_POLL
+    };
+  },
   editPoll: function(poll) {
     return {
       type: types.EDIT_POLL,

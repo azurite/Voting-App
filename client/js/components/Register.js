@@ -19,7 +19,7 @@ const Register = React.createClass({
     return (
       <Grid fluid className="container-aug">
         <Row>
-          <Col md={4} sm={6} mdOffset={4} smOffset={3}>
+          <Col md={4} sm={6} xs={8} mdOffset={4} smOffset={3} xsOffset={2}>
             <RegisterButton>Register</RegisterButton>
             <Form horizontal id="registerAccount" onSubmit={this.props.handleSubmit}>
 

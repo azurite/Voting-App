@@ -43,10 +43,10 @@ module.exports = {
       options: [],
       newOption: ""
     },
+    editDisabled: false,
     deleteDisabled: false,
     createDisabled: false,
     isSaving: false,
-    err: null,
-    success: null
+    err: null
   }
 };

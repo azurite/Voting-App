@@ -1,21 +1,36 @@
 const types = require("../actions/action-manifest");
-// option is always an object of the form { option: "vote option", votes: 0 }
+const copy = require("../utils/copy");
+
 const profileReducer = function(state, action) {
-  var pollcpy, nextState;
+  var nextState;
   switch(action.type) {
-    case types.EDIT_POLL:
-      pollcpy = Object.assign({}, action.poll);
+    case types.CREATE_POLL:
       return Object.assign({}, {
         editorOpen: true,
         editorContent: {
-          title: pollcpy.body.title,
-          options: pollcpy.body.options,
+          title: "",
+          options: [],
           newOption: ""
         },
+        editDisabled: true,
         deleteDisabled: true,
         createDisabled: true,
         isSaving: state.isSaving,
-        success: state.success,
+        err: state.err
+      });
+
+    case types.EDIT_POLL:
+      return Object.assign({}, {
+        editorOpen: true,
+        editorContent: {
+          title: action.poll.body.title,
+          options: copy(action.poll.body.options),
+          newOption: ""
+        },
+        editDisabled: true,
+        deleteDisabled: true,
+        createDisabled: true,
+        isSaving: state.isSaving,
         err: state.err
       });
 
@@ -31,6 +46,7 @@ const profileReducer = function(state, action) {
     case types.ADD_OPTION:
       nextState = Object.assign({}, state);
       nextState.editorContent.options = [action.option].concat(nextState.editorContent.options);
+      nextState.editorContent.newOption = "";
       return nextState;
 
     case types.REMOVE_OPTION:
@@ -44,7 +60,6 @@ const profileReducer = function(state, action) {
       nextState = Object.assign({}, state);
       nextState.isSaving = true;
       nextState.err = null;
-      nextState.success = null;
       return nextState;
 
     case types.SAVE_SUCCESS:
@@ -55,10 +70,10 @@ const profileReducer = function(state, action) {
           options: [],
           newOption: ""
         },
+        editDisabled: false,
         deleteDisabled: false,
         createDisabled: false,
         isSaving: false,
-        success: true,
         err: null
       });
 
@@ -66,10 +81,10 @@ const profileReducer = function(state, action) {
       return Object.assign({}, {
         editorOpen: true,
         editorContent: state.editorContent,
+        editDisabled: true,
         deleteDisabled: true,
         createDisabled: true,
         isSaving: false,
-        success: false,
         err: action.err
       });
 
@@ -81,6 +96,7 @@ const profileReducer = function(state, action) {
         options: [],
         newOption: ""
       };
+      nextState.editDisabled = false;
       nextState.deleteDisabled = false;
       nextState.createDisabled = false;
       return nextState;
