@@ -79,7 +79,7 @@ const chart = {
     this.tip.text("");
   },
   updateTip: function(d) {
-    this.tip.text(d.data.option);
+    this.tip.text(d.data.option + ": " + d.data.votes + " Vote" + (d.data.votes > 1 ? "s" : ""));
   },
   cycle: {
     data: 0,

@@ -18,10 +18,6 @@
   margin-left: 5px;
 }
 
-.create-poll-btn {
-
-}
-
 .poll-editor {
   max-height: 0;
   opacity: 0;
@@ -31,4 +27,24 @@
 .poll-editor.show {
   max-height: 100%;
   opacity: 1;
+}
+
+.poll-editor-ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+.poll-editor-li:after {
+  content: " ";
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+.poll-editor-li button {
+  float: right;
+}
+
+.editor-btn {
+  margin-right: 10px;
 }
