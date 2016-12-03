@@ -19,7 +19,6 @@ module.exports = {
       password: ""
     },
     reqPending: false,
-    user: null,
     err: null
   },
   register: {
@@ -34,7 +33,9 @@ module.exports = {
     password_confirm: {
       value: "",
       isValid: null
-    }
+    },
+    reqPending: false,
+    err: null
   },
   profile: {
     editorOpen: false,
@@ -48,5 +49,6 @@ module.exports = {
     createDisabled: false,
     isSaving: false,
     err: null
-  }
+  },
+  user: null
 };

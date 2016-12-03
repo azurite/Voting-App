@@ -5,7 +5,11 @@ const actions = require("../actions/profile-actions");
 const Poll = require("./PollCard");
 const MEDIA = require("../utils/media");
 
-function pretendSave(path, cb) {
+function pretendSave(path, data, cb) {
+  setTimeout(cb, 1000, null, { success: 1 });
+}
+
+function pretendDelete(path, data, cb) {
   setTimeout(cb, 1000, null, { success: 1 });
 }
 
@@ -75,7 +79,7 @@ const PollEditor = React.createClass({
             </ul>
 
             <FormGroup>
-              <Button className="editor-btn" onClick={this.props.saveEdit}>Save</Button>
+              <Button className="editor-btn" onClick={this.props.saveEdit.bind(this, this.props.content)}>Save</Button>
               <Button className="editor-btn" onClick={this.props.cancelEdit}>Cancel</Button>
               {this.props.isSaving ? <i className="fa fa-spinner fa-spin"></i> :
               (this.props.err ? <span>{this.props.err.message}</span> : null)}
@@ -95,6 +99,7 @@ const User = React.createClass({
     createDisabled: React.PropTypes.bool.isRequired,
     createPoll: React.PropTypes.func.isRequired,
     editPoll: React.PropTypes.func.isRequired,
+    deletePoll: React.PropTypes.func.isRequired,
     editorContent: React.PropTypes.object.isRequired,
     editorOpen: React.PropTypes.bool.isRequired,
     updatePollInput: React.PropTypes.func.isRequired,
@@ -104,10 +109,6 @@ const User = React.createClass({
     addOption: React.PropTypes.func.isRequired,
     isSaving: React.PropTypes.bool.isRequired,
     err: React.PropTypes.object
-  },
-  deletePoll: function() {
-    //poll as first argument
-    //make delete ajax request here
   },
   renderPolls: function() {
     if(this.props.user.ownPolls.length === 0) {
@@ -130,7 +131,7 @@ const User = React.createClass({
           <Button
             className="pollcard-btn"
             bsStyle="danger"
-            onClick={this.deletePoll.bind(this, poll)}
+            onClick={this.props.deletePoll.bind(this, poll)}
             disabled={this.props.deleteDisabled}>
             Delete
           </Button>
@@ -203,7 +204,7 @@ const User = React.createClass({
 
 const mapStateToProps = function(state) {
   return {
-    user: state.login.user,
+    user: state.user,
     editorContent: state.profile.editorContent,
     editorOpen: state.profile.editorOpen,
     editDisabled: state.profile.editDisabled,
@@ -225,15 +226,30 @@ const mapDispatchToProps = function(dispatch) {
     editPoll: function(poll) {
       dispatch(actions.editPoll(poll));
     },
-    saveEdit: function() {
+    deletePoll: function(poll) {
+      pretendDelete("../path/to/api", poll, function(err, res) {
+        if(err) {
+          //dispatch(actions.deleteError(err));
+          return;
+        }
+        if(res.success === 1) {
+          //dispatch(actions.deleteSuccess());
+          //dispatch(actions.updateOwnPolls()); with the new updated polls form server in this response
+        }
+      });
+    },
+    saveEdit: function(poll) {
+      // poll = { title: String, options: ArrayOf { option: String, votes: Number }, newOption: String }
+      // newOption not needed
       dispatch(actions.saveEdit());
-      pretendSave("/path/to/api/route", function(err, status) {
+      pretendSave("/path/to/api/route", poll, function(err, status) {
         if(err) {
           dispatch(actions.saveError(err));
           return;
         }
         if(status.success === 1) {
           dispatch(actions.saveSuccess());
+          //dispatch(actions.updateOwnPolls()); with the new updated polls form server in this response
         }
       });
     },

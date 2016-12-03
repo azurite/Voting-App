@@ -16,7 +16,7 @@ const wrapStoreToRoutes = function(store) {
   const requireAuth = function(nextState, replaceState) {
     const state = store.getState();
 
-    if(state.login.user === null) {
+    if(state.user === null) {
       replaceState({ pathname: "/login" });
     }
   };
@@ -24,7 +24,7 @@ const wrapStoreToRoutes = function(store) {
   const delegateAuth = function(nextState, replaceState) {
     const state = store.getState();
 
-    if(state.login.user) {
+    if(state.user) {
       replaceState({ pathname: "/user/" + state.login.user.id });
     }
   };
@@ -32,7 +32,7 @@ const wrapStoreToRoutes = function(store) {
   const logout = function(nextState, replaceState) {
     const state = store.getState();
 
-    if(state.login.user) {
+    if(state.user) {
       store.dispatch(actions.logout());
       replaceState({ pathname: "/login" });
     }

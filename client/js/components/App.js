@@ -56,7 +56,7 @@ const App = React.createClass({
 
 const mapStateToProps = function(state) {
   return {
-    user: state.login.user
+    user: state.user
   };
 };
 

@@ -10,7 +10,6 @@ const loginReducer = function(state, action) {
           password: action.field === "password" ? action.input : state.emailForm.password
         },
         reqPending: state.reqPending,
-        user: state.user,
         err: state.err
       });
 
@@ -19,7 +18,6 @@ const loginReducer = function(state, action) {
         login: { emailOpen: !state.login.emailOpen },
         emailForm: state.emailForm,
         reqPending: state.reqPending,
-        user: state.user,
         err: state.err
       });
 
@@ -28,7 +26,6 @@ const loginReducer = function(state, action) {
         login: state.login,
         emailForm: state.emailForm,
         reqPending: true,
-        user: state.user,
         err: null
       });
 
@@ -40,7 +37,6 @@ const loginReducer = function(state, action) {
           password: ""
         },
         reqPending: false,
-        user: action.user,
         err: null
       });
 
@@ -52,7 +48,6 @@ const loginReducer = function(state, action) {
           password: ""
         },
         reqPending: false,
-        user: null,
         err: action.err
       });
 
@@ -61,7 +56,6 @@ const loginReducer = function(state, action) {
         login: state.login,
         emailForm: state.emailForm,
         reqPending: state.reqPending,
-        user: null,
         err: state.err
       });
 
