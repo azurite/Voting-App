@@ -25,7 +25,7 @@ const wrapStoreToRoutes = function(store) {
     const state = store.getState();
 
     if(state.user) {
-      replaceState({ pathname: "/user/" + state.login.user.id });
+      replaceState({ pathname: "/user/" + state.user.id });
     }
   };
 
