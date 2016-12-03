@@ -104,8 +104,8 @@ const mapStateToProps = function(state, ownProps) {
         return p.id === parseInt(ownProps.params.pollId, 10);
       });
 
-      if(!polldata && state.login.user) {
-        polldata = state.login.user.ownPolls.find((p) => {
+      if(!polldata && state.user) {
+        polldata = state.user.ownPolls.find((p) => {
           return p.id === parseInt(ownProps.params.pollId, 10);
         });
       }

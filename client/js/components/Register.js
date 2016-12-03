@@ -5,6 +5,11 @@ const { Grid, Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, Help
 const RegisterButton = require("./AuthButton");
 const actions = require("../actions/register-actions");
 
+function pretendRegister(path, data, cb) {
+  const user = require("../dev/sampleAccount");
+  setTimeout(cb, 1000, null, user);
+}
+
 const Register = React.createClass({
   propTypes: {
     getValidationState: React.PropTypes.func.isRequired,
@@ -13,7 +18,9 @@ const Register = React.createClass({
     password_confirm: React.PropTypes.object.isRequired,
     handleChange: React.PropTypes.func.isRequired,
     validate: React.PropTypes.func.isRequired,
-    handleSubmit: React.PropTypes.func.isRequired
+    handleSubmit: React.PropTypes.func.isRequired,
+    reqPending: React.PropTypes.bool.isRequired,
+    err: React.PropTypes.object
   },
   render: function() {
     return (
@@ -67,7 +74,9 @@ const Register = React.createClass({
 
               <FormGroup>
                 <Col sm={10} smOffset={2}>
-                  <Button type="submit">Sign up</Button>
+                  <Button className="signup-btn" type="submit">Sign up</Button>
+                  {this.props.reqPending ? <i className="fa fa-spinner fa-spin"></i> : null}
+                  {this.props.err ? <span className="error-msg">{this.props.err.message}</span> : null}
                 </Col>
               </FormGroup>
 
@@ -86,11 +95,13 @@ const mapStateToProps = function(state) {
     },
     email: state.register.email,
     password: state.register.password,
-    password_confirm: state.register.password_confirm
+    password_confirm: state.register.password_confirm,
+    reqPending: state.register.reqPending,
+    err: state.register.err
   };
 };
 
-const mapDispatchToProps = function(dispatch) {
+const mapDispatchToProps = function(dispatch, ownProps) {
   return {
     handleChange: function(e) {
       switch(e.target.id) {
@@ -112,6 +123,15 @@ const mapDispatchToProps = function(dispatch) {
     },
     handleSubmit: function(e) {
       e.preventDefault();
+      dispatch(actions.register());
+      pretendRegister("../path/to/api", {}, function(err, user) {
+        if(err) {
+          dispatch(actions.registerError(err));
+          return;
+        }
+        dispatch(actions.registerSuccess(user));
+        ownProps.router.push("/user/" + user.id);
+      });
     }
   };
 };

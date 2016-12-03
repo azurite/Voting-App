@@ -34,6 +34,23 @@ const registerReducer = function(state, action) {
       );
       return nextState;
 
+    case types.REGISTER:
+      nextState = Object.assign({}, state);
+      nextState.reqPending = true;
+      return nextState;
+
+    case types.REGISTER_SUCCESS:
+      nextState = Object.assign({}, state);
+      nextState.reqPending = false;
+      nextState.err = null;
+      return nextState;
+
+    case types.REGISTER_ERROR:
+      nextState = Object.assign({}, state);
+      nextState.reqPending = false;
+      nextState.err = action.err;
+      return nextState;
+
     default:
       return state;
   }
