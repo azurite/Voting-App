@@ -34,6 +34,10 @@ module.exports = {
       value: "",
       isValid: null
     },
+    username: {
+      value: "",
+      isValid: null
+    },
     reqPending: false,
     err: null
   },

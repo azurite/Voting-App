@@ -14,6 +14,10 @@ const validator = function(type, value, compare) {
     case "password_confirm":
       if(value === "") { return null; }
       return value === compare;
+
+    case "username":
+      if(value === "") { return null; }
+      return !(/\s/g.test(value));
   }
 };
 
@@ -40,10 +44,26 @@ const registerReducer = function(state, action) {
       return nextState;
 
     case types.REGISTER_SUCCESS:
-      nextState = Object.assign({}, state);
-      nextState.reqPending = false;
-      nextState.err = null;
-      return nextState;
+      return Object.assign({}, {
+        email: {
+          value: "",
+          isValid: null
+        },
+        password: {
+          value: "",
+          isValid: null
+        },
+        password_confirm: {
+          value: "",
+          isValid: null
+        },
+        username: {
+          value: "",
+          isValid: null
+        },
+        reqPending: false,
+        err: null
+      });
 
     case types.REGISTER_ERROR:
       nextState = Object.assign({}, state);
