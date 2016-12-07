@@ -25,7 +25,8 @@ const vendors = [
   "react-router-bootstrap",
   "redux",
   "react-redux",
-  "d3"
+  "d3",
+  "axios"
 ];
 
 const common = {
@@ -77,11 +78,29 @@ switch(process.env.npm_lifecycle_event) {
       options.extractBundle({ name: "vendor", entries: vendors }),
       options.deduplicate(),
       options.minify(),
-      //options.htmlPlugin({ template: PATHS.template }),
       options.pugLoader({ include: PATHS.client }),
       options.babelLoader({ include: PATHS.app }),
       options.extractCSS({ include: PATHS.style, chunkhash: true }),
       options.purifyCSS([PATHS.css])
+    );
+    break;
+
+  case "build:client:dev":
+    config = merge(
+      common,
+      {
+        devtool: "source-map",
+        output: {
+          path: PATHS.build.client,
+          filename: "[name].[chunkhash].js",
+          chunkFilename: "[chunkhash].js"
+        }
+      },
+      options.clean(PATHS.build.client),
+      options.extractBundle({ name: "vendor", entries: vendors }),
+      options.pugLoader({ include: PATHS.client }),
+      options.babelLoader({ include: PATHS.app }),
+      options.extractCSS({ include: PATHS.style, chunkhash: true })
     );
     break;
 
@@ -102,6 +121,24 @@ switch(process.env.npm_lifecycle_event) {
       options.setFreeVariables(),
       options.deduplicate(),
       options.minify(),
+      options.babelLoader({ include: [PATHS.app, PATHS.server, PATHS.backend] })
+    );
+    break;
+
+  case "build:server:dev":
+    config = merge(
+      common,
+      {
+        entry: PATHS.server,
+        target: "node",
+        output: {
+          path: PATHS.build.server,
+          filename: "backend.js"
+        },
+        devtool: "source-map"
+      },
+      options.clean(PATHS.build.server),
+      options.nodeModules(),
       options.babelLoader({ include: [PATHS.app, PATHS.server, PATHS.backend] })
     );
     break;

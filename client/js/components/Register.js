@@ -1,13 +1,24 @@
 const React = require("react");
 const { connect } = require("react-redux");
 const { Grid, Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, HelpBlock } = require("react-bootstrap");
+const axios = require("axios");
 
 const RegisterButton = require("./AuthButton");
 const actions = require("../actions/register-actions");
-
+/*
 function pretendRegister(path, data, cb) {
   const user = require("../dev/sampleAccount");
   setTimeout(cb, 1000, null, user);
+}
+*/
+function registerNewUser(url, data, cb) {
+  axios.post(url, data)
+    .then((res) => {
+      console.log(res.data);
+      console.log(res);
+      cb(null, res.data);
+    })
+    .catch((err) => { cb(err, null); });
 }
 
 const Register = React.createClass({
@@ -16,6 +27,8 @@ const Register = React.createClass({
     email: React.PropTypes.object.isRequired,
     password: React.PropTypes.object.isRequired,
     password_confirm: React.PropTypes.object.isRequired,
+    username: React.PropTypes.object.isRequired,
+    userInput: React.PropTypes.object.isRequired,
     handleChange: React.PropTypes.func.isRequired,
     validate: React.PropTypes.func.isRequired,
     handleSubmit: React.PropTypes.func.isRequired,
@@ -28,7 +41,25 @@ const Register = React.createClass({
         <Row>
           <Col md={4} sm={6} xs={8} mdOffset={4} smOffset={3} xsOffset={2}>
             <RegisterButton>Register</RegisterButton>
-            <Form horizontal id="registerAccount" onSubmit={this.props.handleSubmit}>
+            <Form
+              horizontal
+              id="registerAccount"
+              onSubmit={this.props.handleSubmit.bind(this, this.props.userInput)}>
+
+              <FormGroup controlId="registerUsername" validationState={this.props.getValidationState(this.props.username)}>
+                <Col componentClass={ControlLabel} sm={2}>
+                  Username
+                </Col>
+                <Col sm={10}>
+                  <FormControl
+                    type="text"
+                    placeholder="Username"
+                    value={this.props.username.value}
+                    onChange={this.props.handleChange}
+                    onBlur={this.props.validate.bind(this, "username")}/>
+                    {this.props.username.isValid === false ? <HelpBlock>No whitespace characters</HelpBlock> : null}
+                </Col>
+              </FormGroup>
 
               <FormGroup controlId="registerEmail" validationState={this.props.getValidationState(this.props.email)}>
                 <Col componentClass={ControlLabel} sm={2}>
@@ -96,6 +127,8 @@ const mapStateToProps = function(state) {
     email: state.register.email,
     password: state.register.password,
     password_confirm: state.register.password_confirm,
+    username: state.register.username,
+    userInput: state.register,
     reqPending: state.register.reqPending,
     err: state.register.err
   };
@@ -105,6 +138,10 @@ const mapDispatchToProps = function(dispatch, ownProps) {
   return {
     handleChange: function(e) {
       switch(e.target.id) {
+        case "registerUsername":
+          dispatch(actions.updateInput("username", e.target.value));
+          break;
+
         case "registerEmail":
           dispatch(actions.updateInput("email", e.target.value));
           break;
@@ -121,17 +158,49 @@ const mapDispatchToProps = function(dispatch, ownProps) {
     validate: function(field) {
       dispatch(actions.validateInput(field));
     },
-    handleSubmit: function(e) {
+    handleSubmit: function(userdata, e) {
       e.preventDefault();
-      dispatch(actions.register());
-      pretendRegister("../path/to/api", {}, function(err, user) {
-        if(err) {
-          dispatch(actions.registerError(err));
-          return;
+
+      var fields = ["username", "email", "password", "password_confirm"];
+      var valid = true;
+      for(var p in userdata) {
+        if(userdata.hasOwnProperty(p) && ~fields.indexOf(p)) {
+          if(userdata[p].isValid !== true) {
+            valid = false;
+            break;
+          }
         }
-        dispatch(actions.registerSuccess(user));
-        ownProps.router.push("/user/" + user.id);
-      });
+      }
+
+      if(valid) {
+        dispatch(actions.register());
+        /*
+        pretendRegister("../path/to/api", {}, function(err, user) {
+          if(err) {
+            dispatch(actions.registerError(err));
+            return;
+          }
+          dispatch(actions.registerSuccess(user));
+          ownProps.router.push("/user/" + user.id);
+        });
+        */
+        registerNewUser(
+          "/api/register",
+          {
+            username: userdata.username.value,
+            email: userdata.email.value,
+            password: userdata.password.value
+          },
+          function(err, user) {
+            if(err || user.error) {
+              dispatch(actions.registerError(err || user.error));
+              return;
+            }
+            dispatch(actions.registerSuccess(user));
+            ownProps.router.push("/user/" + user.username);
+          }
+        );
+      }
     }
   };
 };
