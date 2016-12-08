@@ -1,7 +1,8 @@
 const types = {
   ALREADY_REGISTERED: "You can't register while already registered",
   REGISTER_ERROR: "Unknown register Error. Please try again",
-  ALREADY_LOGGED_IN: "You are aleady logged in"
+  ALREADY_LOGGED_IN: "You are aleady logged in",
+  SEARCH_ERROR: "There was an error with the search"
 };
 
 const registerErrors = {

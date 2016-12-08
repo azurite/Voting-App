@@ -1,6 +1,7 @@
 const React = require("react");
 const { Route, IndexRoute } = require("react-router");
 const actions = require("./actions/login-actions");
+const axios = require("axios");
 
 const App = require("./components/App");
 const Home = require("./components/Home");
@@ -33,6 +34,10 @@ const wrapStoreToRoutes = function(store) {
     const state = store.getState();
 
     if(state.user) {
+      axios.post("/api/logout", {})
+      .then(console.log)
+      .catch(console.log);
+
       store.dispatch(actions.logout());
       replaceState({ pathname: "/login" });
     }
@@ -48,7 +53,7 @@ const wrapStoreToRoutes = function(store) {
       <Route path="/polls/:pollId" component={Poll}/>
       <Route path="/login" component={Login} onEnter={delegateAuth}/>
       <Route path="/register" component={Register} onEnter={delegateAuth}/>
-      <Route path="/user/:userId" component={User} onEnter={requireAuth}/>
+      <Route path="/user/:username" component={User} onEnter={requireAuth}/>
       <Route path="/logout" component={Logout} onEnter={logout}/>
     </Route>
   );

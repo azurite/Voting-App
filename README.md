@@ -8,7 +8,5 @@ Buglist:
 
 -------------------------------------------------------------------------------
 Todolist:
-- Implement Register (done)
-- Implement Login
-- Implement Logout
+- Implement Poll editor backend
 -------------------------------------------------------------------------------
