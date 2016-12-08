@@ -10,8 +10,8 @@
     "build:server": "webpack",
     "build:server:dev": "webpack",
     "build:client": "webpack",
-    "build:client:prod": "set NODE_ENV=production&& npm run build:client",
-    "build:client:dev": "webpack"
+    "build:client:dev": "webpack",
+    "build:client:prod": "set NODE_ENV=production&& npm run build:client"
   },
   "repository": {
     "type": "git",

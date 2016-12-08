@@ -45,8 +45,8 @@ passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
-configureRoutes(app);
 configureApi(app);
+configureRoutes(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

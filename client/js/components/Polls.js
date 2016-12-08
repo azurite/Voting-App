@@ -1,14 +1,31 @@
 const React = require("react");
 const { Grid, Row, Col, Button ,Form, FormGroup, FormControl, InputGroup } = require("react-bootstrap");
 const { connect } = require("react-redux");
+const axios = require("axios");
 
 const Poll = require("./PollCard");
 const Loading = require("./LoadingIcon.js");
 const actions = require("../actions/polls-actions");
-
+/*
 function pretendFetch(path, cb) {
   const polls = require("../dev/samplePolls");
   setTimeout(cb, 1000, null, polls);
+}
+*/
+function serializeQuery(q) {
+  var qs = "?", keys = Object.keys(q);
+
+  for(var i = 0; i < keys.length; i++) {
+    qs += keys[i] + "=" + q[keys[i]];
+    i < (keys.length - 1) ? qs += "&" : false;
+  }
+  return qs;
+}
+
+function searchPolls(url, query, cb) {
+  axios.get(url + serializeQuery(query))
+    .then((res) => { cb(null, res.data); })
+    .catch((err) => { cb(err, null); });
 }
 
 const SearchBar = React.createClass({
@@ -21,7 +38,7 @@ const SearchBar = React.createClass({
     return (
       <Row>
         <Col md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
-          <Form onSubmit={this.props.submitSearch}>
+          <Form onSubmit={this.props.submitSearch.bind(this, this.props.searchValue)}>
             <FormGroup>
               <InputGroup>
                 <InputGroup.Addon>
@@ -60,7 +77,7 @@ const Polls = React.createClass({
           </Col>
         );
       });
-      return (<Row>{Polls}</Row>);
+      return Polls.length === 0 ? (<Row><p>no results</p></Row>) : (<Row>{Polls}</Row>);
     }
     if(polls.fetchError) {
       //display useful error component
@@ -90,13 +107,21 @@ const mapStateToProps = function(state) {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-    fetchPolls: function(e) {
+    fetchPolls: function(query, e) {
       e.preventDefault();
       dispatch(actions.fetchPolls());
-      //get search parameter from event object
+      /*
       pretendFetch("../dev/samplePolls", function(err, polls) {
         if(err) {
           dispatch(actions.fetchError(err));
+          return;
+        }
+        dispatch(actions.fetchSuccess(polls));
+      });
+      */
+      searchPolls("/api/search", { q: query }, function(err, polls) {
+        if(err || polls.error) {
+          dispatch(actions.fetchError(err || polls.error));
           return;
         }
         dispatch(actions.fetchSuccess(polls));

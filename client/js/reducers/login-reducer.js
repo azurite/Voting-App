@@ -6,7 +6,7 @@ const loginReducer = function(state, action) {
       return Object.assign({}, {
         login: state.login,
         emailForm: {
-          email: action.field === "email" ? action.input : state.emailForm.email,
+          username: action.field === "username" ? action.input : state.emailForm.username,
           password: action.field === "password" ? action.input : state.emailForm.password
         },
         reqPending: state.reqPending,
@@ -33,7 +33,7 @@ const loginReducer = function(state, action) {
       return Object.assign({}, {
         login: state.login,
         emailForm: {
-          email: "",
+          username: "",
           password: ""
         },
         reqPending: false,
@@ -44,7 +44,7 @@ const loginReducer = function(state, action) {
       return Object.assign({}, {
         login: state.login,
         emailForm: {
-          email: "",
+          username: "",
           password: ""
         },
         reqPending: false,

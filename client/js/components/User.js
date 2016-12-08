@@ -147,7 +147,7 @@ const User = React.createClass({
           <Col md={5} mdOffset={1} sm={10} smOffset={1} xs={10} xsOffset={1}>
             <Row>
               <Col xs={12}>
-                <h2 className="text-center">{"Profile of: " + this.props.params.userId}</h2>
+                <h2 className="text-center">{"Profile of: " + this.props.params.username}</h2>
               </Col>
             </Row>
 

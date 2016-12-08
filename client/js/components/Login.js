@@ -1,10 +1,11 @@
 const React = require("react");
 const { connect } = require("react-redux");
 const { Grid, Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, Checkbox } = require("react-bootstrap");
+const axios = require("axios");
 
 const LoginButton = require("./AuthButton");
 const actions = require("../actions/login-actions");
-
+/*
 function pretendLogin(path, creds, cb) {
   const user = require("../dev/sampleAccount");
 
@@ -18,11 +19,21 @@ function pretendLogin(path, creds, cb) {
     setTimeout(cb, 1000, { message: "invalid username or password" }, null);
   }
 }
+*/
+function loginUser(url, data, cb) {
+  axios.post(url, data)
+    .then((res) => {
+      cb(null, res.data);
+    })
+    .catch((err) => {
+      cb({ message: "invalid username or password" }, null);
+    });
+}
 
 const EmailForm = React.createClass({
   propTypes: {
     isOpen: React.PropTypes.bool.isRequired,
-    email: React.PropTypes.string.isRequired,
+    username: React.PropTypes.string.isRequired,
     password: React.PropTypes.string.isRequired,
     handleChange: React.PropTypes.func.isRequired,
     handleSubmit: React.PropTypes.func.isRequired,
@@ -30,19 +41,19 @@ const EmailForm = React.createClass({
     errmsg: React.PropTypes.object
   },
   onSubmit: function(e) {
-    this.props.handleSubmit(e, this.props.email, this.props.password);
+    this.props.handleSubmit(e, this.props.username, this.props.password);
   },
   render: function() {
     return (
       <div className={this.props.isOpen ? "panel show" : "panel"}>
         <Form horizontal onSubmit={this.onSubmit}>
 
-          <FormGroup controlId="nativeEmail">
+          <FormGroup controlId="nativeUsername">
             <Col componentClass={ControlLabel} sm={2}>
-              Email
+              Username
             </Col>
             <Col sm={10}>
-              <FormControl type="email" placeholder="Email" value={this.props.email} onChange={this.props.handleChange}/>
+              <FormControl type="text" placeholder="Username" value={this.props.username} onChange={this.props.handleChange}/>
             </Col>
           </FormGroup>
 
@@ -78,7 +89,7 @@ const EmailForm = React.createClass({
 const Login = React.createClass({
   propTypes: {
     emailOpen: React.PropTypes.bool.isRequired,
-    email: React.PropTypes.string.isRequired,
+    username: React.PropTypes.string.isRequired,
     password: React.PropTypes.string.isRequired,
     handleChange: React.PropTypes.func.isRequired,
     handleSubmit: React.PropTypes.func.isRequired,
@@ -97,7 +108,7 @@ const Login = React.createClass({
             </LoginButton>
             <EmailForm
               isOpen={this.props.emailOpen}
-              email={this.props.email}
+              username={this.props.username}
               password={this.props.password}
               handleChange={this.props.handleChange}
               handleSubmit={this.props.handleSubmit}
@@ -116,7 +127,7 @@ const Login = React.createClass({
 const mapStateToProps = function(state) {
   return {
     emailOpen: state.login.login.emailOpen,
-    email: state.login.emailForm.email,
+    username: state.login.emailForm.username,
     password: state.login.emailForm.password,
     reqPending: state.login.reqPending,
     errmsg: state.login.err
@@ -134,8 +145,8 @@ const mapDispatchToProps = function(dispatch, ownProps) {
     },
     handleChange: function(e) {
       switch(e.target.id) {
-        case "nativeEmail":
-          dispatch(actions.updateInput(e.target.value, "email"));
+        case "nativeUsername":
+          dispatch(actions.updateInput(e.target.value, "username"));
           break;
 
         case "nativePassword":
@@ -144,15 +155,15 @@ const mapDispatchToProps = function(dispatch, ownProps) {
       }
       return false;
     },
-    handleSubmit: function(e, email, password) {
+    handleSubmit: function(e, username, password) {
       e.preventDefault();
       dispatch(actions.requestLogin());
 
       var creds = {
-        email: email,
+        username: username,
         password: password
       };
-
+      /*
       pretendLogin("../dev/sampleAccount", creds, function(err, user) {
         if(err) {
           dispatch(actions.loginFailure(err));
@@ -160,6 +171,15 @@ const mapDispatchToProps = function(dispatch, ownProps) {
         }
         dispatch(actions.loginSuccess(user));
         ownProps.router.push("/user/" + user.id);
+      });
+      */
+      loginUser("/api/login", creds, function(err, user) {
+        if(err) {
+          dispatch(actions.loginFailure(err));
+          return;
+        }
+        dispatch(actions.loginSuccess(user));
+        ownProps.router.push("/user/" + user.username);
       });
     }
   };

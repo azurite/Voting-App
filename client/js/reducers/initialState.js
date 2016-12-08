@@ -15,7 +15,7 @@ module.exports = {
       emailOpen: false
     },
     emailForm: {
-      email: "",
+      username: "",
       password: ""
     },
     reqPending: false,
