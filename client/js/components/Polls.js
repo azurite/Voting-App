@@ -121,9 +121,11 @@ const mapDispatchToProps = function(dispatch) {
       */
       searchPolls("/api/search", { q: query }, function(err, polls) {
         if(err || polls.error) {
+          console.log(err || polls.error);
           dispatch(actions.fetchError(err || polls.error));
           return;
         }
+        console.log(polls);
         dispatch(actions.fetchSuccess(polls));
       });
     },

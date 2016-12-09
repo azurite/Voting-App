@@ -11,6 +11,9 @@ const userReducer = function(state, action) {
     case types.LOGOUT:
       return null;
 
+    case types.UPDATE_USER_DATA:
+      return action.user;
+
     default:
       return state;
   }

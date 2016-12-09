@@ -8,5 +8,5 @@ Buglist:
 
 -------------------------------------------------------------------------------
 Todolist:
-- Implement Poll editor backend
+- Implement Poll editor backend (partially done)
 -------------------------------------------------------------------------------

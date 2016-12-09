@@ -1,16 +1,38 @@
 const React = require("react");
 const { Grid, Row, Col, Image, Button, FormGroup, InputGroup, FormControl, ControlLabel } = require("react-bootstrap");
 const { connect } = require("react-redux");
+const axios = require("axios");
 const actions = require("../actions/profile-actions");
 const Poll = require("./PollCard");
 const MEDIA = require("../utils/media");
-
+/*
 function pretendSave(path, data, cb) {
   setTimeout(cb, 1000, null, { success: 1 });
 }
-
+*/
 function pretendDelete(path, data, cb) {
   setTimeout(cb, 1000, null, { success: 1 });
+}
+
+function submitEditSave(url, poll, cb) {
+  var polldata = {
+    title: poll.title,
+    options: poll.options
+  };
+
+  if(poll.isNewPoll) {
+
+    axios.post(url, { polldata: polldata })
+      .then((res) => { cb(null, res.data); })
+      .catch((err) => { cb(err, null); });
+  }
+  else {
+    polldata.id = poll.id;
+
+    axios.put(url, { polldata: polldata })
+      .then((res) => { cb(null, res.data); })
+      .catch((err) => { cb(err, null); });
+  }
 }
 
 const PollEditor = React.createClass({
@@ -242,6 +264,7 @@ const mapDispatchToProps = function(dispatch) {
       // poll = { title: String, options: ArrayOf { option: String, votes: Number }, newOption: String }
       // newOption not needed
       dispatch(actions.saveEdit());
+      /*
       pretendSave("/path/to/api/route", poll, function(err, status) {
         if(err) {
           dispatch(actions.saveError(err));
@@ -251,6 +274,15 @@ const mapDispatchToProps = function(dispatch) {
           dispatch(actions.saveSuccess());
           //dispatch(actions.updateOwnPolls()); with the new updated polls form server in this response
         }
+      });
+      */
+      submitEditSave("/api/polleditor", poll, function(err, res) {
+        if(err || res.error) {
+          dispatch(actions.saveError(err || res.error));
+          return;
+        }
+        dispatch(actions.saveSuccess());
+        dispatch(actions.updateUserData(res));
       });
     },
     cancelEdit: function() {

@@ -101,12 +101,12 @@ const mapStateToProps = function(state, ownProps) {
   return {
     polldata: (function() {
       var polldata = state.polls.polls.polldata.find((p) => {
-        return p.id === parseInt(ownProps.params.pollId, 10);
+        return p.id === ownProps.params.pollId;
       });
 
       if(!polldata && state.user) {
         polldata = state.user.ownPolls.find((p) => {
-          return p.id === parseInt(ownProps.params.pollId, 10);
+          return p.id === ownProps.params.pollId;
         });
       }
       return polldata;
