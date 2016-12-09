@@ -6,48 +6,30 @@ const poll = new Schema({
   createdAt: Date,
   body: {
     title: String,
-    options: [{ option: String, votes: Number }]
+    options: [{ option: String, votes: Number, _id: false }]
   }
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
 poll.virtual("body.totalVotes").get(function() {
   return this.body.options.reduce((prev, curr) => {
-    return prev.votes + curr.votes;
-  }, 0);
+    return { votes: prev.votes + curr.votes };
+  }).votes;
 });
-
-const createRegex = function(text) {
-  var final = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-  return { $regex: new RegExp(final), $options: "i" };
-};
-
-const formatPolls = function(cb) {
-  return function(err, polls) {
-    if(err) {
-      return cb(err, null);
-    }
-    polls.forEach((poll) => {
-      poll.body.totalVotes = poll.body.totalVotes;
-      poll.author = poll.author.username;
-      poll.id = parseInt(poll._id.toString(), 10);
-      delete poll._id;
-    });
-    cb(null, polls);
-  };
-};
 
 poll.statics.searchByQuery = function(search, cb) {
   if(!search) {
     return cb(null, []);
   }
-
   var query = search;
-  if(search.indexOf(0) === "/") {
+  if(search.charAt(0) === "/") {
     query = search.substr(1);
     switch(query) {
       case "latest":
         return (
-          this.find({}, { __v: 0 })
+          this.find()
           .sort({ createdAt: -1 })
           .limit(10)
           .populate("author")
@@ -56,10 +38,69 @@ poll.statics.searchByQuery = function(search, cb) {
     }
   }
   return (
-    this.find({ title: createRegex(query) }, { __v: 0 })
+    this.find({ "body.title": createRegex(query) })
     .populate("author")
     .exec(formatPolls(cb))
   );
 };
+
+poll.statics.createNewPoll = function(polldata, username, cb) {
+  var PollModel = this;
+
+  mongoose.model("account").findOne({ username: username }, (err, user) => {
+    if(err) {
+      return cb(err, null);
+    }
+    var newPoll = new PollModel({
+      author: user,
+      createdAt: Date.now(),
+      body: {
+        title: polldata.title,
+        options: polldata.options
+      }
+    });
+
+    user.ownPolls.push(newPoll);
+
+    user.save((err) => {
+      if(err) {
+        return cb(err, null);
+      }
+      newPoll.save((err) => {
+        if(err) {
+          return cb(err, null);
+        }
+        cb(null, "success");
+      });
+    });
+  });
+};
+
+function createRegex(text) {
+  var final = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+  return new RegExp(final);
+}
+
+function formatPolls(cb) {
+  return function(err, polls) {
+    if(err) {
+      cb(err, null);
+      return;
+    }
+    var formatted = polls.map((poll) => {
+      return {
+        id: poll._id.toString(),
+        author: poll.author.username,
+        createdAt: poll.createdAt,
+        body: {
+          title: poll.body.title,
+          options: poll.body.options,
+          totalVotes: poll.body.totalVotes
+        }
+      };
+    });
+    cb(null, formatted);
+  };
+}
 
 module.exports = mongoose.model("poll", poll);

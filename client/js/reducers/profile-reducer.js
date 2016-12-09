@@ -8,6 +8,8 @@ const profileReducer = function(state, action) {
       return Object.assign({}, {
         editorOpen: true,
         editorContent: {
+          isNewPoll: true,
+          id: null,
           title: "",
           options: [],
           newOption: ""
@@ -23,6 +25,8 @@ const profileReducer = function(state, action) {
       return Object.assign({}, {
         editorOpen: true,
         editorContent: {
+          isNewPoll: false,
+          id: action.poll.id,
           title: action.poll.body.title,
           options: copy(action.poll.body.options),
           newOption: ""
@@ -37,6 +41,8 @@ const profileReducer = function(state, action) {
     case types.UPDATE_POLL_INPUT:
       nextState = Object.assign({}, state);
       nextState.editorContent = {
+        isNewPoll: state.editorContent.isNewPoll,
+        id: state.editorContent.id,
         options: state.editorContent.options,
         title: action.field === "title" ? action.value : state.editorContent.title,
         newOption: action.field === "newOption" ? action.value : state.editorContent.newOption
@@ -66,6 +72,8 @@ const profileReducer = function(state, action) {
       return Object.assign({}, {
         editorOpen: false,
         editorContent: {
+          isNewPoll: null,
+          id: null,
           title: "",
           options: [],
           newOption: ""
@@ -92,6 +100,8 @@ const profileReducer = function(state, action) {
       nextState = Object.assign({}, state);
       nextState.editorOpen = false;
       nextState.editorContent = {
+        isNewPoll: null,
+        id: null,
         title: "",
         options: [],
         newOption: ""

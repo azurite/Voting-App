@@ -44,6 +44,8 @@ module.exports = {
   profile: {
     editorOpen: false,
     editorContent: {
+      isNewPoll: null,
+      id: null,
       title: "",
       options: [],
       newOption: ""

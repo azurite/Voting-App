@@ -2,7 +2,10 @@ const types = {
   ALREADY_REGISTERED: "You can't register while already registered",
   REGISTER_ERROR: "Unknown register Error. Please try again",
   ALREADY_LOGGED_IN: "You are aleady logged in",
-  SEARCH_ERROR: "There was an error with the search"
+  SEARCH_ERROR: "There was an error with the search",
+  "CREATE_POLL_ERROR": "There was an error while saving the poll",
+  "UNAUTHORIZED": "You're not authoriezed to communicate with this api",
+  "UPDATE_POLL_INFO_ERROR": "An error happend while updateing our db"
 };
 
 const registerErrors = {

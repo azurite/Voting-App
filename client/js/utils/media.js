@@ -1,9 +1,14 @@
 module.exports = (function media() {
-  const MEDIA = (function(env) {
-    if(env.NODE_ENV === "production" || env.FULL_STACK === "fullstack") {
+  var event;
+  if(process) {
+    event = process.env.npm_lifecycle_event;
+  }
+
+  switch(event) {
+    case "start:dev":
+      return "/client/media";
+
+    default:
       return "/media";
-    }
-    return "/client/media";
-  }(process.env));
-  return MEDIA;
+  }
 }());

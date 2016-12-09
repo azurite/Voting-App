@@ -51,6 +51,12 @@ const profileActions = {
       type: types.SAVE_ERROR,
       err: err
     };
+  },
+  updateUserData: function(user) {
+    return {
+      type: types.UPDATE_USER_DATA,
+      user: user
+    };
   }
 };
 
