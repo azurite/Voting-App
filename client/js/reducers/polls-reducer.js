@@ -1,6 +1,11 @@
 const types = require("../actions/action-manifest");
 
+function match(curr, next) {
+  return (new RegExp(curr, "i")).test(next);
+}
+
 const pollsReducer = function(state, action) {
+  var nextState, nextCache;
   switch(action.type) {
     case types.FETCH_POLLS:
       return Object.assign({}, {
@@ -42,6 +47,33 @@ const pollsReducer = function(state, action) {
         },
         polls: state.polls
       });
+
+    case types.UPDATE_SEARCH_CACHE:
+      nextState = Object.assign({}, state);
+      switch(action.verb) {
+        case "add":
+          if(match(state.searchBar.search, action.poll.body.title)) {
+            nextCache = state.polls.concat([action.poll]);
+          }
+          break;
+
+        case "update":
+          nextCache = state.polls.polldata.map((p) => {
+            if(p.id === action.poll.id) {
+              return action.poll;
+            }
+            return p;
+          });
+          break;
+
+        case "remove":
+          nextCache = state.polls.polldata.filter((p) => {
+            return p.id !== action.poll.id;
+          });
+          break;
+      }
+      nextState.polls.polldata = nextCache || nextState.polls.polldata;
+      return nextState;
 
     default:
       return state;

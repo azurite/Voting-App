@@ -7,12 +7,7 @@ const serializeQuery = require("../utils/serializeQuery");
 const Poll = require("./PollCard");
 const Loading = require("./LoadingIcon.js");
 const actions = require("../actions/polls-actions");
-/*
-function pretendFetch(path, cb) {
-  const polls = require("../dev/samplePolls");
-  setTimeout(cb, 1000, null, polls);
-}
-*/
+
 function searchPolls(url, query, cb) {
   axios.get(url + serializeQuery(query))
     .then((res) => { cb(null, res.data); })
@@ -101,22 +96,12 @@ const mapDispatchToProps = function(dispatch) {
     fetchPolls: function(query, e) {
       e.preventDefault();
       dispatch(actions.fetchPolls());
-      /*
-      pretendFetch("../dev/samplePolls", function(err, polls) {
-        if(err) {
-          dispatch(actions.fetchError(err));
-          return;
-        }
-        dispatch(actions.fetchSuccess(polls));
-      });
-      */
+
       searchPolls("/api/search", { q: query }, function(err, polls) {
         if(err || polls.error) {
-          console.log(err || polls.error);
           dispatch(actions.fetchError(err || polls.error));
           return;
         }
-        console.log(polls);
         dispatch(actions.fetchSuccess(polls));
       });
     },

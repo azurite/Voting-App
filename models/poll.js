@@ -49,7 +49,7 @@ poll.statics.createNewPoll = function(polldata, username, cb) {
 
   mongoose.model("account").findOne({ username: username }, (err, user) => {
     if(err) {
-      return cb(err, null);
+      return cb(err);
     }
     var newPoll = new PollModel({
       author: user,
@@ -64,11 +64,11 @@ poll.statics.createNewPoll = function(polldata, username, cb) {
 
     user.save((err) => {
       if(err) {
-        return cb(err, null);
+        return cb(err);
       }
       newPoll.save((err) => {
         if(err) {
-          return cb(err, null);
+          return cb(err);
         }
         cb(null, "success");
       });
@@ -79,13 +79,13 @@ poll.statics.createNewPoll = function(polldata, username, cb) {
 poll.statics.editPoll = function(polldata, username, cb) {
   this.findById(polldata.id, (err, poll) => {
     if(err) {
-      return cb(err, null);
+      return cb(err);
     }
     poll.body.title = polldata.title;
     poll.body.options = polldata.options;
     poll.save((err) => {
       if(err) {
-        return cb(err, null);
+        return cb(err);
       }
       cb(null, "success");
     });
@@ -127,12 +127,12 @@ function createRegex(text) {
 function formatPolls(cb) {
   return function(err, polls) {
     if(err) {
-      cb(err, null);
+      cb(err);
       return;
     }
     var formatted = polls.map((poll) => {
       return {
-        id: poll._id.toString(),
+        id: poll._id.toString(16),
         author: poll.author.username,
         createdAt: poll.createdAt,
         body: {
