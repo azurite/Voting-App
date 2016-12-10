@@ -76,6 +76,49 @@ poll.statics.createNewPoll = function(polldata, username, cb) {
   });
 };
 
+poll.statics.editPoll = function(polldata, username, cb) {
+  this.findById(polldata.id, (err, poll) => {
+    if(err) {
+      return cb(err, null);
+    }
+    poll.body.title = polldata.title;
+    poll.body.options = polldata.options;
+    poll.save((err) => {
+      if(err) {
+        return cb(err, null);
+      }
+      cb(null, "success");
+    });
+  });
+};
+
+poll.statics.deletePoll = function(id, cb) {
+  this.findById(id, (err, poll) => {
+    if(err) {
+      return cb(err);
+    }
+    poll.remove((err) => {
+      cb(err);
+    });
+  });
+};
+
+poll.pre("remove", function(next) {
+  var self = this;
+  mongoose.model("account").findById(this.author, (err, user) => {
+    if(err) {
+      return next(err);
+    }
+
+    user.ownPolls = user.ownPolls.filter((pollId) => {
+      return pollId.toString(16) !== self._id.toString(16);
+    });
+    user.save((err) => {
+      next(err);
+    });
+  });
+});
+
 function createRegex(text) {
   var final = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
   return new RegExp(final);

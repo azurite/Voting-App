@@ -16,7 +16,7 @@ const App = React.createClass({
           <LinkContainer to="/logout">
             <NavItem className="menu-item">Logout</NavItem>
           </LinkContainer>
-          <LinkContainer to={"/user/" + this.props.user.id}>
+          <LinkContainer to={"/user/" + this.props.user.username}>
             <NavItem className="menu-item">{this.props.user.email}</NavItem>
           </LinkContainer>
         </Nav>

@@ -2,6 +2,7 @@ const React = require("react");
 const { Grid, Row, Col, Button ,Form, FormGroup, FormControl, InputGroup } = require("react-bootstrap");
 const { connect } = require("react-redux");
 const axios = require("axios");
+const serializeQuery = require("../utils/serializeQuery");
 
 const Poll = require("./PollCard");
 const Loading = require("./LoadingIcon.js");
@@ -12,16 +13,6 @@ function pretendFetch(path, cb) {
   setTimeout(cb, 1000, null, polls);
 }
 */
-function serializeQuery(q) {
-  var qs = "?", keys = Object.keys(q);
-
-  for(var i = 0; i < keys.length; i++) {
-    qs += keys[i] + "=" + q[keys[i]];
-    i < (keys.length - 1) ? qs += "&" : false;
-  }
-  return qs;
-}
-
 function searchPolls(url, query, cb) {
   axios.get(url + serializeQuery(query))
     .then((res) => { cb(null, res.data); })
@@ -72,8 +63,8 @@ const Polls = React.createClass({
     if(polls.fetchSuccess) {
       const Polls = polls.polldata.map((poll, index) => {
         return (
-          <Col md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
-            <Poll key={index} data={poll}/>
+          <Col key={index} md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
+            <Poll data={poll}/>
           </Col>
         );
       });

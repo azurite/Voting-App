@@ -18,7 +18,9 @@ const profileReducer = function(state, action) {
         deleteDisabled: true,
         createDisabled: true,
         isSaving: state.isSaving,
-        err: state.err
+        err: state.err,
+        isDeleting: state.isDeleting,
+        deleteErr: state.deleteErr
       });
 
     case types.EDIT_POLL:
@@ -35,7 +37,9 @@ const profileReducer = function(state, action) {
         deleteDisabled: true,
         createDisabled: true,
         isSaving: state.isSaving,
-        err: state.err
+        err: state.err,
+        isDeleting: state.isDeleting,
+        deleteErr: state.deleteErr
       });
 
     case types.UPDATE_POLL_INPUT:
@@ -82,7 +86,9 @@ const profileReducer = function(state, action) {
         deleteDisabled: false,
         createDisabled: false,
         isSaving: false,
-        err: null
+        err: null,
+        isDeleting: state.isDeleting,
+        deleteErr: state.deleteErr
       });
 
     case types.SAVE_ERROR:
@@ -93,7 +99,9 @@ const profileReducer = function(state, action) {
         deleteDisabled: true,
         createDisabled: true,
         isSaving: false,
-        err: action.err
+        err: action.err,
+        isDeleting: state.isDeleting,
+        deleteErr: state.deleteErr
       });
 
     case types.CANCEL_EDIT:
@@ -110,6 +118,24 @@ const profileReducer = function(state, action) {
       nextState.deleteDisabled = false;
       nextState.createDisabled = false;
       return nextState;
+
+    case types.DELETE_POLL:
+      return Object.assign({}, state, {
+        isDeleting: true,
+        deleteErr: null
+      });
+
+    case types.DELETE_SUCCESS:
+      return Object.assign({}, state, {
+        isDeleting: false,
+        deleteErr: null
+      });
+
+    case types.DELETE_ERROR:
+      return Object.assign({}, state, {
+        isDeleting: false,
+        deleteErr: action.err
+      });
 
     default:
       return state;

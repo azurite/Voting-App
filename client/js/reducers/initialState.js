@@ -54,7 +54,9 @@ module.exports = {
     deleteDisabled: false,
     createDisabled: false,
     isSaving: false,
-    err: null
+    err: null,
+    isDeleting: false,
+    deleteErr: null
   },
   user: null
 };

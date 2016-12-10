@@ -35,7 +35,7 @@ const wrapStoreToRoutes = function(store) {
 
     if(state.user) {
       axios.post("/api/logout", {})
-      .then(console.log)
+      .then(() => { return 0; })
       .catch(console.log);
 
       store.dispatch(actions.logout());
