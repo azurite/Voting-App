@@ -2,6 +2,7 @@ const React = require("react");
 const { Grid, Row, Col, Image, Button, FormGroup, InputGroup, FormControl, ControlLabel } = require("react-bootstrap");
 const { connect } = require("react-redux");
 const axios = require("axios");
+const serializeQuery = require("../utils/serializeQuery");
 const actions = require("../actions/profile-actions");
 const Poll = require("./PollCard");
 const MEDIA = require("../utils/media");
@@ -9,11 +10,11 @@ const MEDIA = require("../utils/media");
 function pretendSave(path, data, cb) {
   setTimeout(cb, 1000, null, { success: 1 });
 }
-*/
+
 function pretendDelete(path, data, cb) {
   setTimeout(cb, 1000, null, { success: 1 });
 }
-
+*/
 function submitEditSave(url, poll, cb) {
   var polldata = {
     title: poll.title,
@@ -33,6 +34,12 @@ function submitEditSave(url, poll, cb) {
       .then((res) => { cb(null, res.data); })
       .catch((err) => { cb(err, null); });
   }
+}
+
+function deletePoll(url, poll, cb) {
+  axios.delete(url + serializeQuery({ id: poll.id }))
+    .then((res) => { cb(null, res.data); })
+    .catch((err) => { cb(err, null); });
 }
 
 const PollEditor = React.createClass({
@@ -130,7 +137,9 @@ const User = React.createClass({
     removeOption: React.PropTypes.func.isRequired,
     addOption: React.PropTypes.func.isRequired,
     isSaving: React.PropTypes.bool.isRequired,
-    err: React.PropTypes.object
+    err: React.PropTypes.object,
+    isDeleting: React.PropTypes.bool.isRequired,
+    deleteErr: React.PropTypes.object
   },
   renderPolls: function() {
     if(this.props.user.ownPolls.length === 0) {
@@ -157,6 +166,8 @@ const User = React.createClass({
             disabled={this.props.deleteDisabled}>
             Delete
           </Button>
+          {this.props.isDeleting ? <i className="fa fa-spinner fa-spin"></i> : null}
+          {this.props.deleteErr ? <span>{this.propsDeleteErr.message}</span> : null}
         </Col>
       );
     });
@@ -233,7 +244,9 @@ const mapStateToProps = function(state) {
     deleteDisabled: state.profile.deleteDisabled,
     createDisabled: state.profile.createDisabled,
     isSaving: state.profile.isSaving,
-    err: state.profile.err
+    err: state.profile.err,
+    isDeleting: state.profile.isDeleting,
+    deleteErr: state.profile.deleteErr
   };
 };
 
@@ -249,33 +262,18 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(actions.editPoll(poll));
     },
     deletePoll: function(poll) {
-      pretendDelete("../path/to/api", poll, function(err, res) {
-        if(err) {
-          //dispatch(actions.deleteError(err));
+      dispatch(actions.deletePoll());
+      deletePoll("/api/polleditor", poll, function(err, res) {
+        if(err || res.error) {
+          dispatch(actions.deleteError(err || res.error));
           return;
         }
-        if(res.success === 1) {
-          //dispatch(actions.deleteSuccess());
-          //dispatch(actions.updateOwnPolls()); with the new updated polls form server in this response
-        }
+        dispatch(actions.deleteSuccess());
+        dispatch(actions.updateUserData(res));
       });
     },
     saveEdit: function(poll) {
-      // poll = { title: String, options: ArrayOf { option: String, votes: Number }, newOption: String }
-      // newOption not needed
       dispatch(actions.saveEdit());
-      /*
-      pretendSave("/path/to/api/route", poll, function(err, status) {
-        if(err) {
-          dispatch(actions.saveError(err));
-          return;
-        }
-        if(status.success === 1) {
-          dispatch(actions.saveSuccess());
-          //dispatch(actions.updateOwnPolls()); with the new updated polls form server in this response
-        }
-      });
-      */
       submitEditSave("/api/polleditor", poll, function(err, res) {
         if(err || res.error) {
           dispatch(actions.saveError(err || res.error));

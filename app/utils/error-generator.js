@@ -5,7 +5,9 @@ const types = {
   SEARCH_ERROR: "There was an error with the search",
   "CREATE_POLL_ERROR": "There was an error while saving the poll",
   "UNAUTHORIZED": "You're not authoriezed to communicate with this api",
-  "UPDATE_POLL_INFO_ERROR": "An error happend while updateing our db"
+  "UPDATE_POLL_INFO_ERROR": "An error happend while updateing our db",
+  "EDIT_POLL_ERROR": "Your edits could not be saved",
+  "DELETE_POLL_ERROR": "Your poll could not be deleted"
 };
 
 const registerErrors = {

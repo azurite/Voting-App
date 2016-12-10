@@ -52,6 +52,22 @@ const profileActions = {
       err: err
     };
   },
+  deletePoll: function() {
+    return {
+      type: types.DELETE_POLL
+    };
+  },
+  deleteSuccess: function() {
+    return {
+      type: types.DELETE_SUCCESS
+    };
+  },
+  deleteError: function(err) {
+    return {
+      type: types.DELETE_ERROR,
+      err: err
+    };
+  },
   updateUserData: function(user) {
     return {
       type: types.UPDATE_USER_DATA,
