@@ -52,9 +52,10 @@ const profileActions = {
       err: err
     };
   },
-  deletePoll: function() {
+  deletePoll: function(id) {
     return {
-      type: types.DELETE_POLL
+      type: types.DELETE_POLL,
+      id: id
     };
   },
   deleteSuccess: function() {
@@ -62,16 +63,24 @@ const profileActions = {
       type: types.DELETE_SUCCESS
     };
   },
-  deleteError: function(err) {
+  deleteError: function(err, id) {
     return {
       type: types.DELETE_ERROR,
-      err: err
+      err: err,
+      id: id
     };
   },
   updateUserData: function(user) {
     return {
       type: types.UPDATE_USER_DATA,
       user: user
+    };
+  },
+  updateSearchCache: function(poll, verb) {
+    return {
+      type: types.UPDATE_SEARCH_CACHE,
+      poll: poll,
+      verb: verb
     };
   }
 };

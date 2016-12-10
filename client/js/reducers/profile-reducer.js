@@ -57,6 +57,7 @@ const profileReducer = function(state, action) {
       nextState = Object.assign({}, state);
       nextState.editorContent.options = [action.option].concat(nextState.editorContent.options);
       nextState.editorContent.newOption = "";
+      nextState.err = null;
       return nextState;
 
     case types.REMOVE_OPTION:
@@ -117,24 +118,34 @@ const profileReducer = function(state, action) {
       nextState.editDisabled = false;
       nextState.deleteDisabled = false;
       nextState.createDisabled = false;
+      nextState.err = null;
       return nextState;
 
     case types.DELETE_POLL:
       return Object.assign({}, state, {
-        isDeleting: true,
+        editDisabled: true,
+        deleteDisabled: true,
+        createDisabled: true,
+        isDeleting: { id: action.id },
         deleteErr: null
       });
 
     case types.DELETE_SUCCESS:
       return Object.assign({}, state, {
+        editDisabled: false,
+        deleteDisabled: false,
+        createDisabled: false,
         isDeleting: false,
         deleteErr: null
       });
 
     case types.DELETE_ERROR:
       return Object.assign({}, state, {
+        editDisabled: false,
+        deleteDisabled: false,
+        createDisabled: false,
         isDeleting: false,
-        deleteErr: action.err
+        deleteErr: { for: action.id, data: action.err }
       });
 
     default:

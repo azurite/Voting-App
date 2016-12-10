@@ -6,15 +6,7 @@ const serializeQuery = require("../utils/serializeQuery");
 const actions = require("../actions/profile-actions");
 const Poll = require("./PollCard");
 const MEDIA = require("../utils/media");
-/*
-function pretendSave(path, data, cb) {
-  setTimeout(cb, 1000, null, { success: 1 });
-}
 
-function pretendDelete(path, data, cb) {
-  setTimeout(cb, 1000, null, { success: 1 });
-}
-*/
 function submitEditSave(url, poll, cb) {
   var polldata = {
     title: poll.title,
@@ -24,22 +16,22 @@ function submitEditSave(url, poll, cb) {
   if(poll.isNewPoll) {
 
     axios.post(url, { polldata: polldata })
-      .then((res) => { cb(null, res.data); })
-      .catch((err) => { cb(err, null); });
+      .then((res) => { cb(null, res.data, "add"); })
+      .catch((err) => { cb(err); });
   }
   else {
     polldata.id = poll.id;
 
     axios.put(url, { polldata: polldata })
-      .then((res) => { cb(null, res.data); })
-      .catch((err) => { cb(err, null); });
+      .then((res) => { cb(null, res.data, "update"); })
+      .catch((err) => { cb(err); });
   }
 }
 
 function deletePoll(url, poll, cb) {
   axios.delete(url + serializeQuery({ id: poll.id }))
     .then((res) => { cb(null, res.data); })
-    .catch((err) => { cb(err, null); });
+    .catch((err) => { cb(err); });
 }
 
 const PollEditor = React.createClass({
@@ -111,7 +103,7 @@ const PollEditor = React.createClass({
               <Button className="editor-btn" onClick={this.props.saveEdit.bind(this, this.props.content)}>Save</Button>
               <Button className="editor-btn" onClick={this.props.cancelEdit}>Cancel</Button>
               {this.props.isSaving ? <i className="fa fa-spinner fa-spin"></i> :
-              (this.props.err ? <span>{this.props.err.message}</span> : null)}
+              (this.props.err ? <span className="error-msg">{this.props.err.message}</span> : null)}
             </FormGroup>
         </div>
       </Col>
@@ -138,7 +130,7 @@ const User = React.createClass({
     addOption: React.PropTypes.func.isRequired,
     isSaving: React.PropTypes.bool.isRequired,
     err: React.PropTypes.object,
-    isDeleting: React.PropTypes.bool.isRequired,
+    isDeleting: React.PropTypes.oneOfType([React.PropTypes.bool, React.PropTypes.object]).isRequired,
     deleteErr: React.PropTypes.object
   },
   renderPolls: function() {
@@ -149,6 +141,9 @@ const User = React.createClass({
         </Col>
       );
     }
+    var isDel = this.props.isDeleting;
+    var delErr = this.props.deleteErr;
+
     return this.props.user.ownPolls.map((poll, i) => {
       return (
         <Col xs={12} key={i} className="user-poll-cards">
@@ -166,8 +161,8 @@ const User = React.createClass({
             disabled={this.props.deleteDisabled}>
             Delete
           </Button>
-          {this.props.isDeleting ? <i className="fa fa-spinner fa-spin"></i> : null}
-          {this.props.deleteErr ? <span>{this.propsDeleteErr.message}</span> : null}
+          {isDel && isDel.id === poll.id ? <i className="fa fa-spinner fa-spin"></i> : null}
+          {delErr && delErr.for === poll.id ? <span className="error-msg">{delErr.data.message}</span> : null}
         </Col>
       );
     });
@@ -262,26 +257,39 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(actions.editPoll(poll));
     },
     deletePoll: function(poll) {
-      dispatch(actions.deletePoll());
+      dispatch(actions.deletePoll(poll.id));
       deletePoll("/api/polleditor", poll, function(err, res) {
         if(err || res.error) {
-          dispatch(actions.deleteError(err || res.error));
+          dispatch(actions.deleteError(err || res.error, poll.id));
           return;
         }
         dispatch(actions.deleteSuccess());
         dispatch(actions.updateUserData(res));
+        dispatch(actions.updateSearchCache(poll, "remove"));
       });
     },
     saveEdit: function(poll) {
-      dispatch(actions.saveEdit());
-      submitEditSave("/api/polleditor", poll, function(err, res) {
-        if(err || res.error) {
-          dispatch(actions.saveError(err || res.error));
-          return;
-        }
-        dispatch(actions.saveSuccess());
-        dispatch(actions.updateUserData(res));
-      });
+      if(poll.options.length > 0) {
+        dispatch(actions.saveEdit());
+        submitEditSave("/api/polleditor", poll, function(err, res, type) {
+          if(err || res.error) {
+            dispatch(actions.saveError(err || res.error));
+            return;
+          }
+          dispatch(actions.saveSuccess());
+          dispatch(actions.updateUserData(res));
+
+          if(type === "update") {
+            var updated = res.ownPolls.find((p) => {
+              return p.id === poll.id;
+            });
+            dispatch(actions.updateSearchCache(updated, "update"));
+          }
+        });
+      }
+      else {
+        dispatch(actions.saveError({ message: "You have to add at least 1 option" }));
+      }
     },
     cancelEdit: function() {
       dispatch(actions.cancelEdit());
