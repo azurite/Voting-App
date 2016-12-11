@@ -1,11 +1,8 @@
 const React = require("react");
-const { createStore } = require("redux");
 const { Provider } = require("react-redux");
 const { renderToString } = require("react-dom/server");
 const { match, RouterContext } = require("react-router");
 
-const reducer = require("../client/js/reducers/root-reducer");
-const initialState = require("../client/js/reducers/initialState");
 const routes = require("../client/js/routes");
 const assets = require("./serve-bundles.js")({
   root: process.cwd(),
@@ -16,13 +13,12 @@ const assets = require("./serve-bundles.js")({
   }
 });
 
-const store = createStore(reducer, initialState);
-const preloadedState = store.getState();
-
 module.exports = function(app) {
 
   app.get("*", (req, res) => {
-    match({ routes: routes(store), location: req.url  }, (err, redirect, props) => {
+    const preloadedState = req.reduxStore.getState();
+
+    match({ routes: routes(req.reduxStore), location: req.url  }, (err, redirect, props) => {
       if(err) {
         res.status(500).send(err.message);
       }
@@ -31,7 +27,7 @@ module.exports = function(app) {
       }
       else if(props) {
         const html = renderToString(
-          <Provider store={store}>
+          <Provider store={req.reduxStore}>
             <RouterContext {...props}/>
           </Provider>
         );

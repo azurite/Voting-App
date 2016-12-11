@@ -58,5 +58,6 @@ module.exports = {
     isDeleting: false,
     deleteErr: null
   },
-  user: null
+  user: null,
+  preloadedPoll: null
 };

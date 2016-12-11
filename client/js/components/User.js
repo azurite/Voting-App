@@ -266,10 +266,11 @@ const mapDispatchToProps = function(dispatch) {
         dispatch(actions.deleteSuccess());
         dispatch(actions.updateUserData(res));
         dispatch(actions.updateSearchCache(poll, "remove"));
+        dispatch(actions.updatePreloadedPoll(poll, "remove"));
       });
     },
     saveEdit: function(poll) {
-      if(poll.options.length > 0) {
+      if(poll.options.length > 0 && poll.title !== "") {
         dispatch(actions.saveEdit());
         submitEditSave("/api/polleditor", poll, function(err, res, type) {
           if(err || res.error) {
@@ -284,11 +285,12 @@ const mapDispatchToProps = function(dispatch) {
               return p.id === poll.id;
             });
             dispatch(actions.updateSearchCache(updated, "update"));
+            dispatch(actions.updatePreloadedPoll(updated, "update"));
           }
         });
       }
       else {
-        dispatch(actions.saveError({ message: "You have to add at least 1 option" }));
+        dispatch(actions.saveError({ message: "You have to add at least 1 option and a title" }));
       }
     },
     cancelEdit: function() {
