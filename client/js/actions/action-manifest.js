@@ -34,7 +34,10 @@ const actions = {
   DELETE_ERROR: "DELETE_ERROR",
   //preloadedPollReducer
   PRELOAD_POLL: "PRELOAD_POLL",
-  UPDATE_PRELOADED_POLL: "UPDATE_PRELOADED_POLL"
+  UPDATE_PRELOADED_POLL: "UPDATE_PRELOADED_POLL",
+  //special vote actions
+  VOTE: "VOTE",
+  VOTE_ERROR: "VOTE_ERROR"
 };
 
 module.exports = actions;

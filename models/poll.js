@@ -51,6 +51,7 @@ poll.statics.createNewPoll = function(polldata, username, cb) {
     if(err) {
       return cb(err);
     }
+
     var newPoll = new PollModel({
       author: user,
       createdAt: Date.now(),
@@ -144,6 +145,28 @@ poll.statics.preloadPoll = function(id, cb) {
         cb();
       }
     });
+};
+
+poll.statics.vote = function(id, voteOption, cb) {
+  this.findOne({ _id: id }, (err, poll) => {
+    if(err) {
+      return cb(err);
+    }
+    var options = poll.body.options;
+
+    options.forEach((opt) => {
+      if(opt.option === voteOption) {
+        ++opt.votes;
+      }
+    });
+
+    poll.update({ "body.options": options }, (err) => {
+      if(err) {
+        return cb(err);
+      }
+      cb(null, { success: 1 });
+    });
+  });
 };
 
 function createRegex(text) {
