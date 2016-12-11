@@ -75,6 +75,23 @@ const pollsReducer = function(state, action) {
       nextState.polls.polldata = nextCache || nextState.polls.polldata;
       return nextState;
 
+    case types.VOTE:
+      nextState = Object.assign({}, state);
+      nextState.polls.polldata = nextState.polls.polldata.map((poll) => {
+        if(poll.id === action.vote.id) {
+          ++poll.body.totalVotes;
+          poll.body.options = poll.body.options.map((opt) => {
+            if(opt.option === action.vote.option) {
+              ++opt.votes;
+            }
+            return opt;
+          });
+          return poll;
+        }
+        return poll;
+      });
+      return nextState;
+
     default:
       return state;
   }

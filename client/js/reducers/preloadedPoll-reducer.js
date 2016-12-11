@@ -21,6 +21,23 @@ module.exports = function(state, action) {
     case types.PRELOAD_POLL:
       return action.poll;
 
+    case types.VOTE:
+      if(state && state.id === action.vote.id) {
+        return Object.assign({}, state, {
+          body: {
+            title: state.body.title,
+            totalVotes: state.body.totalVotes + 1,
+            options: state.body.options.map((opt) => {
+              if(opt.option === action.vote.option) {
+                ++opt.votes;
+              }
+              return opt;
+            })
+          }
+        });
+      }
+      return state;
+
     default:
       return state;
   }
