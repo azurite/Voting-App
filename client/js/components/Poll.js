@@ -109,6 +109,11 @@ const mapStateToProps = function(state, ownProps) {
           return p.id === ownProps.params.pollId;
         });
       }
+
+      if(!polldata && state.preloadedPoll) {
+        polldata = state.preloadedPoll;
+      }
+      
       return polldata;
     }())
   };

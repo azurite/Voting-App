@@ -82,6 +82,19 @@ const profileActions = {
       poll: poll,
       verb: verb
     };
+  },
+  updatePreloadedPoll: function(poll, verb) {
+    return {
+      type: types.UPDATE_PRELOADED_POLL,
+      poll: poll,
+      verb: verb
+    };
+  },
+  preloadPoll: function(poll) {
+    return {
+      type: types.PRELOAD_POLL,
+      poll: poll
+    };
   }
 };
 

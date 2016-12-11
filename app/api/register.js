@@ -5,7 +5,7 @@ const generate = generator.exec;
 
 module.exports = function(app) {
   app.post("/api/register", (req, res) => {
-    if(req.user) {
+    if(req.isAuthenticated()) {
       res.json(generate("ALREADY_REGISTERED"));
     }
     else {

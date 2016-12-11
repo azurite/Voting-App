@@ -48,21 +48,32 @@ const chart = {
       .sort(null)
       .value((d) => { return d.votes; });
 
-    var g = this.svg.selectAll(".arc")
-      .data(pie(this.data.body.options.filter((d) => { return d.votes > 0; })))
-    .enter().append("g")
-      .attr("class", "arc");
+    var g;
 
-    g
-      .append("path")
-      .attr("d", arc)
-      .style("fill", () => { return colors[this.cycle.increment()]; });
+    if(this.data.body.totalVotes === 0) {
+      g = this.svg.append("circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", this.options.radius - 10)
+        .attr("fill", colors[0]);
+    }
+    else {
+      g = this.svg.selectAll(".arc")
+        .data(pie(this.data.body.options.filter((d) => { return d.votes > 0; })))
+      .enter().append("g")
+        .attr("class", "arc");
 
-    g.append("text")
-      .attr("transform", (d) => { return "translate(" + labelArc.centroid(d) + ")"; })
-      .attr("dy", "0.35em")
-      .attr("text-anchor", "middle")
-      .text((d) => { return Math.round(100 * d.data.votes / this.data.body.totalVotes) + "%"; });
+      g
+        .append("path")
+        .attr("d", arc)
+        .style("fill", () => { return colors[this.cycle.increment()]; });
+
+      g.append("text")
+        .attr("transform", (d) => { return "translate(" + labelArc.centroid(d) + ")"; })
+        .attr("dy", "0.35em")
+        .attr("text-anchor", "middle")
+        .text((d) => { return Math.round(100 * d.data.votes / this.data.body.totalVotes) + "%"; });
+    }
 
     g
       .on("mouseover", this.updateTip.bind(this))
@@ -79,7 +90,13 @@ const chart = {
     this.tip.text("");
   },
   updateTip: function(d) {
-    this.tip.text(d.data.option + ": " + d.data.votes + " Vote" + (d.data.votes > 1 ? "s" : ""));
+    if(!d) {
+      this.tip.text("No Votes");
+    }
+    else {
+      this.tip.text(d.data.option + ": " + d.data.votes + " Vote" + (d.data.votes > 1 ? "s" : ""));
+
+    }
   },
   cycle: {
     data: 0,

@@ -6,12 +6,11 @@
   "scripts": {
     "start:dev": "webpack-dev-server",
     "start:prod": "set NODE_ENV=production&& npm run build:server && npm run build:client && node build/server/backend.js",
-    "start:dev:full": "set FULL_STACK=fullstack&& npm run build:client:dev && npm run build:server:dev && node build/server/backend.js",
+    "start:dev:full": "npm run build:client:dev && npm run build:server:dev && node build/server/backend.js",
     "build:server": "webpack",
     "build:server:dev": "webpack",
     "build:client": "webpack",
-    "build:client:dev": "webpack",
-    "build:client:prod": "set NODE_ENV=production&& npm run build:client"
+    "build:client:dev": "webpack"
   },
   "repository": {
     "type": "git",

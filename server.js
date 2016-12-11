@@ -27,8 +27,9 @@ const sessionOptions = {
 
 const serveStatic = require("serve-static");
 const logger = require("connect-logger");
-const configureRoutes = require("./app/routes");
 const configureApi = require("./app/api/root");
+const initializeStore = require("./app/initialize-store");
+const configureRoutes = require("./app/routes");
 
 app.set("view engine", "pug");
 app.set("views", path.join(process.cwd(), "client"));
@@ -46,6 +47,7 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 configureApi(app);
+initializeStore(app);
 configureRoutes(app);
 
 const PORT = process.env.PORT || 8080;

@@ -119,6 +119,33 @@ poll.pre("remove", function(next) {
   });
 });
 
+poll.statics.preloadPoll = function(id, cb) {
+  this.findOne({ _id: id })
+    .populate("author")
+    .exec((err, poll) => {
+      if(err) {
+        return cb(err);
+      }
+
+      if(poll) {
+        var formatted = {
+          id: poll._id.toString(16),
+          author: poll.author.username,
+          createdAt: poll.createdAt,
+          body: {
+            title: poll.body.title,
+            options: poll.body.options,
+            totalVotes: poll.body.totalVotes
+          }
+        };
+        cb(null, formatted);
+      }
+      else {
+        cb();
+      }
+    });
+};
+
 function createRegex(text) {
   var final = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
   return new RegExp(final);
