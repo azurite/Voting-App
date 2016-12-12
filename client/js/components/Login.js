@@ -5,21 +5,7 @@ const axios = require("axios");
 
 const LoginButton = require("./AuthButton");
 const actions = require("../actions/login-actions");
-/*
-function pretendLogin(path, creds, cb) {
-  const user = require("../dev/sampleAccount");
 
-  if(creds.email === "example@email.com" && creds.password === "pass1") {
-    setTimeout(cb, 1000, null, user);
-  }
-  else if(creds.email === "" && creds.password === "") {
-    setTimeout(cb, 1000, null, user);
-  }
-  else {
-    setTimeout(cb, 1000, { message: "invalid username or password" }, null);
-  }
-}
-*/
 function loginUser(url, data, cb) {
   axios.post(url, data)
     .then((res) => {
@@ -163,16 +149,7 @@ const mapDispatchToProps = function(dispatch, ownProps) {
         username: username,
         password: password
       };
-      /*
-      pretendLogin("../dev/sampleAccount", creds, function(err, user) {
-        if(err) {
-          dispatch(actions.loginFailure(err));
-          return;
-        }
-        dispatch(actions.loginSuccess(user));
-        ownProps.router.push("/user/" + user.id);
-      });
-      */
+      
       loginUser("/api/login", creds, function(err, user) {
         if(err) {
           dispatch(actions.loginFailure(err));

@@ -5,9 +5,8 @@ Notes:
 - Front end generally finished (02.12.16)
 -------------------------------------------------------------------------------
 Buglist:
-- Pollchart sometimes not rendering on the server correctly (Firefox) Chrome is fine
+
 -------------------------------------------------------------------------------
 Todolist:
 - Filter out options which are identical (same name) so no duplicates are possible
-- Make d3 chart update pattern behave correctly
 -------------------------------------------------------------------------------

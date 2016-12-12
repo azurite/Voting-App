@@ -3,6 +3,7 @@ module.exports = {
     searchBar: {
       search: ""
     },
+    didVote: null,
     polls: {
       polldata: [],
       isFetching: false,

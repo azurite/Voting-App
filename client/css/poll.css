@@ -2,6 +2,10 @@
   margin-top: 25px;
 }
 
+.vote-btn {
+  margin-right: 10px;
+}
+
 .poll-detail-view {
   margin-top: 50px;
 }
@@ -10,10 +14,14 @@
   display: inline-block;
 }
 
-.svg-container {
-  max-width: 100%;
-  text-align: center;
+.poll-chart-wrapper {
+  width: 100%;
+  height: 320px;
   overflow: hidden;
+}
+
+rect {
+  fill: #E7E7E7 !important;
 }
 
 .poll-container {

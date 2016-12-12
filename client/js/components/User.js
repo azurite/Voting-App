@@ -49,11 +49,11 @@ const PollEditor = React.createClass({
   handleChange: function(e) {
     switch(e.target.id) {
       case "editPollTitle":
-        this.props.updatePollInput("title", e.target.value.trim());
+        this.props.updatePollInput("title", e.target.value);
         break;
 
       case "editPollOption":
-        this.props.updatePollInput("newOption", e.target.value.trim());
+        this.props.updatePollInput("newOption", e.target.value);
         break;
     }
     return false;

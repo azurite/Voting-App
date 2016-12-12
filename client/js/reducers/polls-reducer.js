@@ -10,6 +10,7 @@ const pollsReducer = function(state, action) {
     case types.FETCH_POLLS:
       return Object.assign({}, {
         searchBar: state.searchBar,
+        didVote: state.didVote,
         polls: {
           polldata:[],
           isFetching: true,
@@ -21,6 +22,7 @@ const pollsReducer = function(state, action) {
     case types.FETCH_SUCCESS:
       return Object.assign({}, {
         searchBar: state.searchBar,
+        didVote: state.didVote,
         polls: {
           isFetching: false,
           fetchSuccess: true,
@@ -32,6 +34,7 @@ const pollsReducer = function(state, action) {
     case types.FETCH_ERROR:
       return Object.assign({}, {
         searchBar: state.searchBar,
+        didVote: state.didVote,
         polls: {
           isFetching: false,
           fetchSuccess: false,
@@ -45,6 +48,7 @@ const pollsReducer = function(state, action) {
         searchBar: {
           search: action.search
         },
+        didVote:state.didVote,
         polls: state.polls
       });
 
@@ -91,6 +95,11 @@ const pollsReducer = function(state, action) {
         return poll;
       });
       return nextState;
+
+    case types.TOGGLE_DID_VOTE_MSG:
+      return Object.assign({}, state, {
+        didVote: state.didVote ? null : action.message
+      });
 
     default:
       return state;

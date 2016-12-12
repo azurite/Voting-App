@@ -5,12 +5,7 @@ const axios = require("axios");
 
 const RegisterButton = require("./AuthButton");
 const actions = require("../actions/register-actions");
-/*
-function pretendRegister(path, data, cb) {
-  const user = require("../dev/sampleAccount");
-  setTimeout(cb, 1000, null, user);
-}
-*/
+
 function registerNewUser(url, data, cb) {
   axios.post(url, data)
     .then((res) => {
@@ -174,16 +169,6 @@ const mapDispatchToProps = function(dispatch, ownProps) {
 
       if(valid) {
         dispatch(actions.register());
-        /*
-        pretendRegister("../path/to/api", {}, function(err, user) {
-          if(err) {
-            dispatch(actions.registerError(err));
-            return;
-          }
-          dispatch(actions.registerSuccess(user));
-          ownProps.router.push("/user/" + user.id);
-        });
-        */
         registerNewUser(
           "/api/register",
           {

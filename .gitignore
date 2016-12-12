@@ -10,6 +10,12 @@ config/.env
 #webpack builds
 build
 
+#samples for development
+client/js/dev
+
+#not using d3 anymore
+client/js/d3
+
 #test code
 tests
 
