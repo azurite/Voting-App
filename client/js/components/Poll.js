@@ -1,10 +1,12 @@
 const React = require("react");
 const { connect } = require("react-redux");
+const { Chart } = require("react-google-charts");
 const { Grid, Row, Col, Button, Form, FormControl, FormGroup, ControlLabel } = require("react-bootstrap");
 const axios = require("axios");
+const voteStore = require("../utils/voteStore");
 const actions = require("../actions/vote-actions");
-const d3Chart = require("../d3/piechart");
 const format = require("../utils/format");
+const Loading = require("./LoadingIcon");
 
 function voteOnPoll(url, vote, cb) {
   axios.post(url, vote)
@@ -12,89 +14,10 @@ function voteOnPoll(url, vote, cb) {
     .catch((err) => { cb(err); });
 }
 
-const voteStore = {
-  hasStore: function() {
-    if(typeof(Storage) !== "undefined") {
-      try {
-        localStorage.setItem("__test_item__", "__test_value_");
-        if(localStorage.getItem("__test_item__") === "__test_value_") {
-          return true;
-        }
-      } catch(e) {
-        return false;
-      }
-    }
-    return false;
-  },
-  push: function(pollId) {
-    if(this.hasStore()) {
-      var voted = localStorage.getItem("votedPolls");
-      if(voted) {
-        voted = JSON.parse(voted);
-      }
-      else {
-        voted = [];
-      }
-      voted.push(pollId);
-      localStorage.setItem("votedPolls", JSON.stringify(voted));
-    }
-  },
-  hasVotedOn: function(pollId) {
-    if(this.hasStore()) {
-      var voted = localStorage.getItem("votedPolls");
-      if(voted) {
-        voted = JSON.parse(voted);
-      }
-      else {
-        voted = [];
-      }
-      var cmpare = voted.find((id) => {
-        return id === pollId;
-      });
-
-      return cmpare ? true : false;
-    }
-    return false;
-  }
-};
-
-const PieChart = React.createClass({
-  propTypes: {
-    polldata: React.PropTypes.object
-  },
-  componentDidMount: function() {
-    if(this.props.polldata) {
-      d3Chart.create(
-        this.d3chart,
-        { width: 300, height: 320, radius: 150 },
-        this.props.polldata
-      );
-    }
-  },
-  componentDidUpdate: function() {
-    d3Chart.update(this.props.polldata);
-  },
-  componentWillUnmount: function() {
-    d3Chart.destroy();
-  },
-  render: function() {
-    const poll = this.props.polldata;
-    if(poll) {
-      return (
-        <div className="svg-container" ref={(node) => { this.d3chart = node; }}></div>
-      );
-    }
-    else {
-      return (
-        <p className="text-center">No grahpic can be displayed</p>
-      );
-    }
-  }
-});
-
 const PollDetails = React.createClass({
   propTypes: {
     polldata: React.PropTypes.object,
+    didVote: React.PropTypes.bool,
     submitVote: React.PropTypes.func.isRequired
   },
   getInitialState: function() {
@@ -109,9 +32,6 @@ const PollDetails = React.createClass({
   },
   changeOpt: function(e) {
     this.setState({ activeOption: e.target.value });
-  },
-  didVote: function(id) {
-    return voteStore.hasVotedOn(id);
   },
   render: function() {
     const poll = this.props.polldata;
@@ -130,7 +50,8 @@ const PollDetails = React.createClass({
               </FormControl>
             </FormGroup>
             <FormGroup>
-              <Button type="submit" disabled={this.didVote(poll.id)}>Vote</Button>
+              <Button className="vote-btn" type="submit">Vote</Button>
+              {this.props.didVote && <span className="error-msg">{this.props.didVote}</span>}
             </FormGroup>
           </Form>
           <span>{"Created By: " + poll.author}</span>
@@ -150,18 +71,40 @@ const Poll = React.createClass({
   propTypes: {
     params: React.PropTypes.object,
     polldata: React.PropTypes.object,
+    didVote: React.PropTypes.bool,
     submitVote: React.PropTypes.func.isRequired
+  },
+  transformPollData: function() {
+    var data = this.props.polldata.body.options;
+    var head = ["option", "votes"];
+    var body = data.map((opt) => {
+      return [opt.option, opt.votes];
+    });
+
+    return [head].concat(body);
   },
   render: function() {
     return (
       <Grid fluid className="container-aug">
         <Row>
           <Col className="poll-container" xs={10} xsOffset={1}>
-            <Col md={5} sm={5} xs={10} mdOffset={0} smOffset={0} xsOffset={1}>
-              <PieChart polldata={this.props.polldata}/>
+            <Col md={6} sm={10} xs={10} mdOffset={0} smOffset={1} xsOffset={1}>
+              <div className="poll-chart-wrapper">
+                <Chart
+                  chartType="PieChart"
+                  width="100%"
+                  height="320px"
+                  data={this.transformPollData()}
+                  loader={<Loading size="fa-3x"/>}
+                />
+              </div>
             </Col>
-            <Col md={5} sm={5} xs={10} mdOffset={1} smOffset={1} xsOffset={1}>
-              <PollDetails polldata={this.props.polldata} submitVote={this.props.submitVote}/>
+            <Col md={5} sm={10} xs={10} mdOffset={0} smOffset={1} xsOffset={1}>
+              <PollDetails
+                polldata={this.props.polldata}
+                submitVote={this.props.submitVote}
+                didVote={this.props.didVote}
+              />
             </Col>
           </Col>
         </Row>
@@ -188,7 +131,8 @@ const mapStateToProps = function(state, ownProps) {
       }
 
       return polldata;
-    }())
+    }()),
+    didVote: state.polls.didVote
   };
 };
 
@@ -196,16 +140,22 @@ const mapDispatchToProps = function(dispatch) {
   return {
     submitVote: function(vote, e) {
       e.preventDefault();
-      voteStore.push(vote.id);
+      if(!voteStore.hasVotedOn(vote.id)) {
+        voteStore.push(vote.id);
 
-      dispatch(actions.vote(vote));
-      voteOnPoll("/api/vote", vote, (err, res) => {
-        if(err || res.error) {
-          dispatch(actions.voteError(err || res.error));
-          return;
-        }
-        console.log(res);
-      });
+        dispatch(actions.vote(vote));
+        voteOnPoll("/api/vote", vote, (err, res) => {
+          if(err || res.error) {
+            dispatch(actions.voteError(err || res.error));
+            return;
+          }
+          console.log(res);
+        });
+      }
+      else {
+        dispatch(actions.toggleDidVoteMsg());
+        setTimeout(dispatch, 2000, actions.toggleDidVoteMsg());
+      }
     }
   };
 };

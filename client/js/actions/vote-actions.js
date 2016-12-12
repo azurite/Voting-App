@@ -12,5 +12,11 @@ module.exports = {
       type: types.VOTE_ERROR,
       er: err
     };
+  },
+  toggleDidVoteMsg: function() {
+    return {
+      type: types.TOGGLE_DID_VOTE_MSG,
+      message: "You already voted on this poll"
+    };
   }
 };

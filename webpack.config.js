@@ -23,6 +23,7 @@ const vendors = [
   "react-router",
   "react-bootstrap",
   "react-router-bootstrap",
+  "react-google-charts",
   "redux",
   "react-redux",
   "d3",

@@ -37,7 +37,8 @@ const actions = {
   UPDATE_PRELOADED_POLL: "UPDATE_PRELOADED_POLL",
   //special vote actions
   VOTE: "VOTE",
-  VOTE_ERROR: "VOTE_ERROR"
+  VOTE_ERROR: "VOTE_ERROR",
+  TOGGLE_DID_VOTE_MSG: "TOGGLE_DID_VOTE_MSG"
 };
 
 module.exports = actions;
