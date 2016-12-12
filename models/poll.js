@@ -122,6 +122,10 @@ poll.pre("remove", function(next) {
 });
 
 poll.statics.preloadPoll = function(id, cb) {
+  if( !(/^[a-fA-F0-9]{24}$/.test(id)) ) {
+    return cb(null, null);
+  }
+
   this.findOne({ _id: id })
     .populate("author")
     .exec((err, poll) => {

@@ -10,6 +10,20 @@ body {
   background-color: #E7E7E7;
 }
 
+.padd {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.btn-responsive {
+  white-space: normal !important;
+  word-wrap: break-word;
+}
+
+.poll-not-found {
+  margin-bottom: 15px;
+}
+
 :focus {
   outline: none !important;
 }

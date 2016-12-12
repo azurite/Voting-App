@@ -11,6 +11,7 @@ const Login = require("./components/Login");
 const Register = require("./components/Register");
 const User = require("./components/User");
 const Logout = require("./components/Logout");
+const NotFound = require("./components/NotFound");
 
 const wrapStoreToRoutes = function(store) {
 
@@ -55,6 +56,7 @@ const wrapStoreToRoutes = function(store) {
       <Route path="/register" component={Register} onEnter={delegateAuth}/>
       <Route path="/user/:username" component={User} onEnter={requireAuth}/>
       <Route path="/logout" component={Logout} onEnter={logout}/>
+      <Route path="*" component={NotFound}/>
     </Route>
   );
 };

@@ -7,6 +7,7 @@ const voteStore = require("../utils/voteStore");
 const actions = require("../actions/vote-actions");
 const format = require("../utils/format");
 const Loading = require("./LoadingIcon");
+const NotFound = require("./PollNotFound");
 
 function voteOnPoll(url, vote, cb) {
   axios.post(url, vote)
@@ -61,7 +62,7 @@ const PollDetails = React.createClass({
     }
     else {
       return (
-        <p className="text-center">Sorry but this poll doesnt exist in our database</p>
+        <NotFound/>
       );
     }
   }
@@ -75,8 +76,17 @@ const Poll = React.createClass({
     submitVote: React.PropTypes.func.isRequired
   },
   transformPollData: function() {
-    var data = this.props.polldata.body.options;
     var head = ["option", "votes"];
+
+    if(!this.props.polldata) {
+      return [head, ["no data", 0]];
+    }
+    var data = this.props.polldata.body.options;
+
+    if(this.props.polldata.body.totalVotes === 0) {
+      return [head, ["No votes yet", 1]];
+    }
+
     var body = data.map((opt) => {
       return [opt.option, opt.votes];
     });
@@ -96,6 +106,7 @@ const Poll = React.createClass({
                   height="320px"
                   data={this.transformPollData()}
                   loader={<Loading size="fa-3x"/>}
+                  options={{ title: this.props.polldata ? "" : "No data can be displayd" }}
                 />
               </div>
             </Col>
