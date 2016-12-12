@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Tools = require("./utils/pollTools");
 
 const poll = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "account" },
@@ -33,14 +34,14 @@ poll.statics.searchByQuery = function(search, cb) {
           .sort({ createdAt: -1 })
           .limit(10)
           .populate("author")
-          .exec(formatPolls(cb))
+          .exec(Tools.formatPolls(cb))
         );
     }
   }
   return (
-    this.find({ "body.title": createRegex(query) })
+    this.find({ "body.title": Tools.createRegex(query) })
     .populate("author")
-    .exec(formatPolls(cb))
+    .exec(Tools.formatPolls(cb))
   );
 };
 
@@ -56,8 +57,8 @@ poll.statics.createNewPoll = function(polldata, username, cb) {
       author: user,
       createdAt: Date.now(),
       body: {
-        title: polldata.title,
-        options: polldata.options
+        title: Tools.trim(polldata.title),
+        options: Tools.use(polldata.options, ["trim", "unique"])
       }
     });
 
@@ -168,32 +169,5 @@ poll.statics.vote = function(id, voteOption, cb) {
     });
   });
 };
-
-function createRegex(text) {
-  var final = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-  return new RegExp(final);
-}
-
-function formatPolls(cb) {
-  return function(err, polls) {
-    if(err) {
-      cb(err);
-      return;
-    }
-    var formatted = polls.map((poll) => {
-      return {
-        id: poll._id.toString(16),
-        author: poll.author.username,
-        createdAt: poll.createdAt,
-        body: {
-          title: poll.body.title,
-          options: poll.body.options,
-          totalVotes: poll.body.totalVotes
-        }
-      };
-    });
-    cb(null, formatted);
-  };
-}
 
 module.exports = mongoose.model("poll", poll);
