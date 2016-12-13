@@ -36,7 +36,7 @@ const App = React.createClass({
       <div id="app-data-root">
         <Navbar className="navbar-custom">
           <Navbar.Header>
-            <Navbar.Brand className="menu-head">Voting App</Navbar.Brand>
+            <Navbar.Brand className="menu-head">Votinator</Navbar.Brand>
             <Navbar.Toggle/>
           </Navbar.Header>
           <Navbar.Collapse>
