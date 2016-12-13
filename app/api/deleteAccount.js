@@ -8,7 +8,7 @@ const generate = generator.exec;
 module.exports = function(app) {
   app.delete("/api/deleteAccount", ensureAuthenticated, (req, res) => {
     const id = qs.parse(url.parse(req.url).query).id;
-    console.log(id);
+    
     Account.deleteUserAndPolls(id, (err) => {
       if(err) {
         return res.json(generate("ACCOUNT_DELETE_ERROR", err));

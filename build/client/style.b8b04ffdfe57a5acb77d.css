@@ -1,0 +1,317 @@
+#app-data-root {
+  min-height: 100%;
+  position: relative;
+}
+
+.navbar-custom {
+  background-color: #34495e;
+  border-radius: 0;
+}
+
+.menu-head,.menu-item>a {
+  color: #e7e7e7!important;
+}
+
+.menu-item>a:hover {
+  text-decoration: underline!important;
+}
+
+.active>a {
+  color: #34495e!important;
+}
+
+.home-container {
+  padding-bottom: 50px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 3em;
+  color: #34495e;
+}
+
+.line {
+  border: 2px solid #34495e;
+  border-radius: 100%;
+}
+
+.image-center-squared {
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+}
+
+.row-space {
+  padding-top: 25px;
+  padding-bottom: 25px;
+  margin-top: 100px;
+}
+
+.row-dark {
+  background-color: #34495e;
+}
+
+.info-box {
+  box-sizing: border-box;
+  padding: 25px;
+  margin: 10px;
+  border: 1px solid #e7e7e7;
+  border-radius: 5px;
+}
+
+.info-box>h4,.info-box>p {
+  color: #e7e7e7;
+}
+
+.info-box>p {
+  text-align: justify;
+}
+
+.tech {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding-bottom: 50px;
+}
+
+.tech-row {
+  padding: 25px;
+}
+
+.first {
+  margin-top: 3%;
+}
+
+.tech-stack {
+  color: #34495e;
+  padding: 50px;
+}
+
+.tech-stack-img {
+  margin: 0 auto;
+}
+
+.express-img {
+  height: 30px;
+  width: 150px;
+}
+
+.node-img {
+  height: 100px;
+  width: 163px;
+}
+
+.mongo-img {
+  height: 100px;
+  width: 100px;
+}
+
+.react-img {
+  height: 100px;
+  width: 85px;
+}
+
+.accordion {
+  color: #e7e7e7;
+  border-radius: 0;
+  background-color: #34495e;
+}
+
+.accordion:hover {
+  color: #e7e7e7;
+}
+
+.accordion:focus,.accordion:hover {
+  text-decoration: underline!important;
+  background-color: #34495e!important;
+}
+
+.accordion:focus {
+  color: #e7e7e7!important;
+}
+
+.panel {
+  margin-top: 10px;
+  background-color: #e7e7e7;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: .4s ease-in-out;
+}
+
+.panel.show {
+  max-height: 300px;
+  opacity: 1;
+}
+
+.login-btn {
+  margin-right: 10px;
+}
+
+.error-msg {
+  color: red;
+}
+
+#registerAccount {
+  margin-top: 10px;
+}
+
+.signup-btn {
+  margin-right: 10px;
+}
+
+.loading-icon {
+  padding-top: 50px;
+  text-align: center;
+}
+
+.pollcard {
+  margin: 5px;
+  padding: 12px;
+  border: 5px solid #34495e;
+  border-radius: 10px;
+  background: #b0c4de;
+  background: -webkit-linear-gradient(141deg,#e7e7e7,#b0c4de);
+  background: linear-gradient(141deg,#b0c4de,#e7e7e7);
+  box-shadow: 3px 3px 3px 0 rgba(0,0,0,.6);
+}
+
+.pollcard h3 {
+  padding-bottom: 5px;
+  color: #34496e;
+}
+
+.pollcard span {
+  display: inline-block;
+}
+
+#pollDetail {
+  margin-top: 25px;
+}
+
+.vote-btn {
+  margin-right: 10px;
+}
+
+.poll-detail-view {
+  margin-top: 50px;
+}
+
+.poll-detail-view span {
+  display: inline-block;
+}
+
+.poll-chart-wrapper {
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+}
+
+rect {
+  fill: #e7e7e7!important;
+}
+
+.poll-container {
+  border: 1px solid #222;
+  border-radius: 5px;
+  box-shadow: 0 0 3px 1px rgba(0,0,0,.6);
+}
+
+.profile-img {
+  max-height: 150px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.user-poll-cards {
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+
+.pollcard-btn {
+  margin-left: 5px;
+}
+
+.create-poll-btn {
+  margin-right: 10px;
+}
+
+.poll-editor {
+  max-height: 0;
+  opacity: 0;
+  transition: .4s ease-in-out;
+}
+
+.poll-editor.show {
+  max-height: 100%;
+  opacity: 1;
+}
+
+.poll-editor-ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+.poll-editor-li:after {
+  content: " ";
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+.poll-editor-li button {
+  float: right;
+}
+
+.editor-btn {
+  margin-right: 10px;
+}
+
+body {
+  background-color: #e7e7e7;
+}
+
+.padd {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.btn-responsive {
+  white-space: normal!important;
+  word-wrap: break-word;
+}
+
+.poll-not-found {
+  margin-bottom: 15px;
+}
+
+:focus {
+  outline: none!important;
+}
+
+.container-aug {
+  margin-bottom: 55px;
+}
+
+.copy {
+  text-align: center;
+  padding: 15px;
+}
+
+.copy a {
+  color: #e7e7e7;
+  text-decoration: none;
+}
+
+.copy a:hover {
+  text-decoration: underline;
+}
+
+.copy a:visited {
+  text-decoration: none;
+}
+/*# sourceMappingURL=style.b8b04ffdfe57a5acb77d.css.map*/
