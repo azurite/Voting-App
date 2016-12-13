@@ -8,7 +8,8 @@ DB
 config/.env
 
 #webpack build
-build
+build/client/*.*
+build/server
 
 #samples for development
 client/js/dev
