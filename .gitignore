@@ -7,6 +7,10 @@ DB
 #environment variables
 config/.env
 
+#webpack build
+build/client/*.*
+build/server
+
 #samples for development
 client/js/dev
 
