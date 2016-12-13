@@ -26,7 +26,6 @@ const sessionOptions = {
 };
 
 const serveStatic = require("serve-static");
-const logger = require("connect-logger");
 const configureApi = require("./app/api/root");
 const initializeStore = require("./app/initialize-store");
 const configureRoutes = require("./app/routes");
@@ -34,7 +33,6 @@ const configureRoutes = require("./app/routes");
 app.set("view engine", "pug");
 app.set("views", path.join(process.cwd(), "client"));
 
-app.use(logger());
 app.use(serveStatic(path.join(process.cwd(), "build", "client")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
