@@ -98,7 +98,7 @@
 	initializeStore(app);
 	configureRoutes(app);
 	
-	app.listen(({"NODE_ENV":"production"}).PORT);
+	app.listen(({"NODE_ENV":"production"}).PORT || 8080);
 
 /***/ },
 /* 1 */
