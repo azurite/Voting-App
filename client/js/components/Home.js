@@ -10,7 +10,7 @@ const Home = React.createClass({
         <Row>
           <Col md={8} mdOffset={2}>
             <Image className="image-center-squared" src={MEDIA + "/v-logo.gif"} responsive circle/>
-            <h1 className="text-primary text-center title">Voting App</h1>
+            <h1 className="text-primary text-center title">Votinator</h1>
             <div className="line"/>
           </Col>
         </Row>
@@ -31,19 +31,19 @@ const Home = React.createClass({
           <Col md={4} mdOffset={0} xs={8} xsOffset={2}>
             <div className="info-box">
               <h4 className="text-center">create</h4>
-              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>
+              <p>Create an account and you can immediately start to create and customize your personal polls</p>
             </div>
           </Col>
           <Col md={4} mdOffset={0} xs={8} xsOffset={2}>
             <div className="info-box">
               <h4 className="text-center">share</h4>
-              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>
+              <p>Share your polls with friends and people in general whom you whish to vote on your poll</p>
             </div>
           </Col>
           <Col md={4} mdOffset={0} xs={8} xsOffset={2}>
             <div className="info-box">
               <h4 className="text-center">manage</h4>
-              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>
+              <p>You can always come back later to edit your polls. Don't like them anymore? Delete them entirely</p>
             </div>
           </Col>
         </Row>
