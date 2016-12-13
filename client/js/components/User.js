@@ -34,6 +34,12 @@ function deletePoll(url, poll, cb) {
     .catch((err) => { cb(err); });
 }
 
+function deleteAccountReqest(url, id, cb) {
+  axios.delete(url + serializeQuery({ id: id }))
+    .then((res) => { cb(null, res.data); })
+    .catch((err) => { cb(err); });
+}
+
 const PollEditor = React.createClass({
   propTypes: {
     content: React.PropTypes.object,
@@ -128,16 +134,18 @@ const User = React.createClass({
     cancelEdit: React.PropTypes.func.isRequired,
     removeOption: React.PropTypes.func.isRequired,
     addOption: React.PropTypes.func.isRequired,
+    deleteAccount: React.PropTypes.func.isRequired,
     isSaving: React.PropTypes.bool.isRequired,
     err: React.PropTypes.object,
     isDeleting: React.PropTypes.oneOfType([React.PropTypes.bool, React.PropTypes.object]).isRequired,
-    deleteErr: React.PropTypes.object
+    deleteErr: React.PropTypes.object,
+    delAccErr: React.PropTypes.object
   },
   renderPolls: function() {
     if(this.props.user.ownPolls.length === 0) {
       return (
         <Col xs={12}>
-          <p>You dont have any polls</p>
+          <p className="text-center">You dont have any polls</p>
         </Col>
       );
     }
@@ -175,7 +183,7 @@ const User = React.createClass({
           <Col md={5} mdOffset={1} sm={10} smOffset={1} xs={10} xsOffset={1}>
             <Row>
               <Col xs={12}>
-                <h2 className="text-center">{"Profile of: " + this.props.params.username}</h2>
+                <h2 className="text-center">Profile</h2>
               </Col>
             </Row>
 
@@ -186,7 +194,7 @@ const User = React.createClass({
                 <Image className="profile-img" src={MEDIA + "/avatar-default.png"} responsive circle/>
               </Col>
               <Col sm={6} xs={12}>
-                <h3>{this.props.user.email}</h3>
+                <h3>{this.props.user.username}</h3>
               </Col>
             </Row>
 
@@ -198,6 +206,14 @@ const User = React.createClass({
                   disabled={this.props.createDisabled}>
                   Create Poll
                 </Button>
+                <Button
+                  className="create-poll-btn"
+                  bsStyle="danger"
+                  onClick={this.props.deleteAccount.bind(this, this.props.user.id)}
+                  disabled={this.props.deleteDisabled}>
+                  Delete Account
+                </Button>
+                {this.props.delAccErr && <span className="error-msg">{this.props.delAccErr.message}</span>}
               </Col>
             </Row>
 
@@ -241,11 +257,12 @@ const mapStateToProps = function(state) {
     isSaving: state.profile.isSaving,
     err: state.profile.err,
     isDeleting: state.profile.isDeleting,
-    deleteErr: state.profile.deleteErr
+    deleteErr: state.profile.deleteErr,
+    delAccErr: state.profile.delAccErr
   };
 };
 
-const mapDispatchToProps = function(dispatch) {
+const mapDispatchToProps = function(dispatch, ownProps) {
   return {
     updatePollInput: function(field, input) {
       dispatch(actions.updatePollInput(field, input));
@@ -303,6 +320,17 @@ const mapDispatchToProps = function(dispatch) {
       if(option.trim() !== "") {
         dispatch(actions.addOption({ option: option, votes: 0 }));
       }
+    },
+    deleteAccount: function(userId) {
+      deleteAccountReqest("/api/deleteAccount", userId, (err, res) => {
+        if(err || res.error) {
+          dispatch(actions.deleteAccountError(err || res.error));
+          return;
+        }
+        ownProps.router.push("/");
+        dispatch(actions.deleteAccount());
+        dispatch(actions.purgeMemory());
+      });
     }
   };
 };

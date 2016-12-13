@@ -57,7 +57,8 @@ module.exports = {
     isSaving: false,
     err: null,
     isDeleting: false,
-    deleteErr: null
+    deleteErr: null,
+    delAccError: null
   },
   user: null,
   preloadedPoll: null

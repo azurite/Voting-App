@@ -38,6 +38,9 @@ module.exports = function(state, action) {
       }
       return state;
 
+    case types.PURGE_MEMORY:
+      return null;
+
     default:
       return state;
   }

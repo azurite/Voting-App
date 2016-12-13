@@ -14,7 +14,7 @@ account.plugin(passportLocalMongoose, {
 });
 
 account.statics.getUpdatedUser = function(username, cb) {
-  this.findOne({ username: username }, { _id: 0, __v: 0 })
+  this.findOne({ username: username }, { __v: 0 })
     .populate("ownPolls")
     .exec((err, user) => {
       if(err) {
@@ -34,6 +34,7 @@ account.statics.getUpdatedUser = function(username, cb) {
       });
 
       var formattedUser = {
+        id: user._id.toString(16),
         username: user.username,
         email: user.email,
         ownPolls: formatted
@@ -42,5 +43,22 @@ account.statics.getUpdatedUser = function(username, cb) {
       cb(null, formattedUser);
     });
 };
+
+account.statics.deleteUserAndPolls = function(id, cb) {
+  this.findById(id, (err, user) => {
+    if(err) {
+      return cb(err);
+    }
+    user.remove((err) => {
+      cb(err);
+    });
+  });
+};
+
+account.pre("remove", function(next) {
+  mongoose.model("poll").remove({ author: this._id }, (err) => {
+    next(err);
+  });
+});
 
 module.exports = mongoose.model("account", account);

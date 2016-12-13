@@ -18,6 +18,10 @@
   margin-left: 5px;
 }
 
+.create-poll-btn {
+  margin-right: 10px;
+}
+
 .poll-editor {
   max-height: 0;
   opacity: 0;

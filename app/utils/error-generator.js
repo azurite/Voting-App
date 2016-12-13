@@ -7,7 +7,8 @@ const types = {
   "UNAUTHORIZED": "You're not authoriezed to communicate with this api",
   "UPDATE_POLL_INFO_ERROR": "An error happend while updateing our db",
   "EDIT_POLL_ERROR": "Your edits could not be saved",
-  "DELETE_POLL_ERROR": "Your poll could not be deleted"
+  "DELETE_POLL_ERROR": "Your poll could not be deleted",
+  "ACCOUNT_DELETE_ERROR": "We couldn't delete your account please try again"
 };
 
 const registerErrors = {
@@ -16,9 +17,10 @@ const registerErrors = {
 
 function mapNameToMessage(err, type) {
   if(err) {
+    console.log(err);
     switch(err.name) {
       case "UserExistsError":
-        return registerErrors[name];
+        return registerErrors[err.name];
 
       default:
         return types[type];

@@ -41,6 +41,7 @@ const registerReducer = function(state, action) {
     case types.REGISTER:
       nextState = Object.assign({}, state);
       nextState.reqPending = true;
+      nextState.err = null;
       return nextState;
 
     case types.REGISTER_SUCCESS:

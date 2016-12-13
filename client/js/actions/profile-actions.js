@@ -95,6 +95,17 @@ const profileActions = {
       type: types.PRELOAD_POLL,
       poll: poll
     };
+  },
+  deleteAccount: function() {
+    return {
+      type: types.DELETE_ACCOUNT
+    };
+  },
+  deleteAccountError: function(err) {
+    return {
+      type: types.DELETE_ACCOUNT_ERROR,
+      err: err
+    };
   }
 };
 

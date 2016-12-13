@@ -4,6 +4,7 @@ const voteStore = {
       try {
         localStorage.setItem("__test_item__", "__test_value_");
         if(localStorage.getItem("__test_item__") === "__test_value_") {
+          localStorage.removeItem("__test_item__");
           return true;
         }
       } catch(e) {
@@ -12,9 +13,9 @@ const voteStore = {
     }
     return false;
   },
-  push: function(pollId) {
+  push: function(username, pollId) {
     if(this.hasStore()) {
-      var voted = localStorage.getItem("votedPolls");
+      var voted = localStorage.getItem("_" + username + "_" + "votedPolls");
       if(voted) {
         voted = JSON.parse(voted);
       }
@@ -22,12 +23,12 @@ const voteStore = {
         voted = [];
       }
       voted.push(pollId);
-      localStorage.setItem("votedPolls", JSON.stringify(voted));
+      localStorage.setItem("_" + username + "_" + "votedPolls", JSON.stringify(voted));
     }
   },
-  hasVotedOn: function(pollId) {
+  hasVotedOn: function(username, pollId) {
     if(this.hasStore()) {
-      var voted = localStorage.getItem("votedPolls");
+      var voted = localStorage.getItem("_" + username + "_" + "votedPolls");
       if(voted) {
         voted = JSON.parse(voted);
       }
@@ -41,6 +42,11 @@ const voteStore = {
       return cmpare ? true : false;
     }
     return false;
+  },
+  reset: function(username) {
+    if(this.hasStore()) {
+      localStorage.removeItem("_" + username + "_" + "votedPolls");
+    }
   }
 };
 

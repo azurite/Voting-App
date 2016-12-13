@@ -1,6 +1,6 @@
 const React = require("react");
 const { connect } = require("react-redux");
-const { Grid, Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, Checkbox } = require("react-bootstrap");
+const { Grid, Row, Col, Button, Form, FormGroup, FormControl, ControlLabel } = require("react-bootstrap");
 const axios = require("axios");
 
 const LoginButton = require("./AuthButton");
@@ -11,7 +11,7 @@ function loginUser(url, data, cb) {
     .then((res) => {
       cb(null, res.data);
     })
-    .catch((err) => {
+    .catch((err) => { //eslint-disable-line
       cb({ message: "invalid username or password" }, null);
     });
 }
@@ -49,12 +49,6 @@ const EmailForm = React.createClass({
             </Col>
             <Col sm={10}>
               <FormControl type="password" placeholder="Password" value={this.props.password} onChange={this.props.handleChange}/>
-            </Col>
-          </FormGroup>
-
-          <FormGroup>
-            <Col sm={10} smOffset={2}>
-              <Checkbox>Remember Me</Checkbox>
             </Col>
           </FormGroup>
 
@@ -101,8 +95,6 @@ const Login = React.createClass({
               reqPending={this.props.reqPending}
               errmsg={this.props.errmsg}
             />
-            <LoginButton id="github" onClick={this.props.login}>Login with Github</LoginButton>
-            <LoginButton id="twitter" onClick={this.props.login}>Login with Twitter</LoginButton>
           </Col>
         </Row>
       </Grid>
@@ -125,10 +117,6 @@ const mapDispatchToProps = function(dispatch, ownProps) {
     toggleEmailForm: function() {
       dispatch(actions.toggleEmailForm());
     },
-    login: function() {
-      //noop (event object as argument)
-      //handle login with social media here
-    },
     handleChange: function(e) {
       switch(e.target.id) {
         case "nativeUsername":
@@ -149,7 +137,7 @@ const mapDispatchToProps = function(dispatch, ownProps) {
         username: username,
         password: password
       };
-      
+
       loginUser("/api/login", creds, function(err, user) {
         if(err) {
           dispatch(actions.loginFailure(err));
