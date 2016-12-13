@@ -5,7 +5,7 @@ module.exports = (function media() {
   }
 
   switch(event) {
-    case "start:dev":
+    case "dev-server":
       return "/client/media";
 
     default:

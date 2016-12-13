@@ -1,10 +1,13 @@
-module.exports = function format(date) {
-  try {
-    var d = new Date(date).toString();
-  } catch(e) {
+module.exports = function format(time) {
+  var date = new Date(time);
+  if(date.toString() === "Invalid Date") {
     return "unknown";
   }
-  d = d.split(" ");
-  d.splice(d.length - 2);
-  return d.join(" ");
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
+
+  var m = date.getMonth();
+  var d = date.getDate();
+  var y = date.getFullYear();
+
+  return months[m] + " " + d + " " + y;
 };

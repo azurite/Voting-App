@@ -101,6 +101,16 @@ const pollsReducer = function(state, action) {
         didVote: state.didVote ? null : action.message
       });
 
+    case types.PURGE_MEMORY:
+      return Object.assign({}, state, {
+        polls: {
+          polldata: [],
+          isFetching: false,
+          fetchSuccess: null,
+          fetchError: null
+        }
+      });
+
     default:
       return state;
   }

@@ -8,11 +8,7 @@ const actions = require("../actions/register-actions");
 
 function registerNewUser(url, data, cb) {
   axios.post(url, data)
-    .then((res) => {
-      console.log(res.data);
-      console.log(res);
-      cb(null, res.data);
-    })
+    .then((res) => { cb(null, res.data); })
     .catch((err) => { cb(err, null); });
 }
 

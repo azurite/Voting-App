@@ -26,7 +26,6 @@ const vendors = [
   "react-google-charts",
   "redux",
   "react-redux",
-  "d3",
   "axios"
 ];
 
@@ -48,7 +47,7 @@ const common = {
 var config = {};
 
 switch(process.env.npm_lifecycle_event) {
-  case "start:dev":
+  case "dev-server":
     config = merge(
       common,
       { devtool: "source-map" },

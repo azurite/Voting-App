@@ -83,8 +83,8 @@ poll.statics.editPoll = function(polldata, username, cb) {
     if(err) {
       return cb(err);
     }
-    poll.body.title = polldata.title;
-    poll.body.options = polldata.options;
+    poll.body.title = Tools.trim(polldata.title);
+    poll.body.options = Tools.use(polldata.options, ["trim", "unique"]);
     poll.save((err) => {
       if(err) {
         return cb(err);

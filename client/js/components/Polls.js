@@ -63,11 +63,10 @@ const Polls = React.createClass({
           </Col>
         );
       });
-      return Polls.length === 0 ? (<Row><p>no results</p></Row>) : (<Row>{Polls}</Row>);
+      return Polls.length === 0 ? (<Row><p className="text-center">no results</p></Row>) : (<Row>{Polls}</Row>);
     }
     if(polls.fetchError) {
-      //display useful error component
-      return (<p>error fetching polls</p>);
+      return (<p className="text-center">Whoops this shouldn't have happend. Please try again</p>);
     }
   },
   render: function() {
