@@ -141,6 +141,24 @@ const User = React.createClass({
     deleteErr: React.PropTypes.object,
     delAccErr: React.PropTypes.object
   },
+  confirmAction: function(type, payload) {
+    var iAmSure = false;
+    switch(type) {
+      case "poll":
+        iAmSure = confirm("Are you sure? This action can't be undone");
+        if(iAmSure) {
+          this.props.deletePoll(payload);
+        }
+        break;
+
+      case "account":
+        iAmSure = confirm("Are you sure? Your account will be gone forever");
+        if(iAmSure) {
+          this.props.deleteAccount(payload);
+        }
+        break;
+    }
+  },
   renderPolls: function() {
     if(this.props.user.ownPolls.length === 0) {
       return (
@@ -165,7 +183,7 @@ const User = React.createClass({
           <Button
             className="pollcard-btn"
             bsStyle="danger"
-            onClick={this.props.deletePoll.bind(this, poll)}
+            onClick={this.confirmAction.bind(this, "poll", poll)}
             disabled={this.props.deleteDisabled}>
             Delete
           </Button>
@@ -209,7 +227,7 @@ const User = React.createClass({
                 <Button
                   className="create-poll-btn"
                   bsStyle="danger"
-                  onClick={this.props.deleteAccount.bind(this, this.props.user.id)}
+                  onClick={this.confirmAction.bind(this, "account", this.props.user.id)}
                   disabled={this.props.deleteDisabled}>
                   Delete Account
                 </Button>

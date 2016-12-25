@@ -74,7 +74,6 @@ const Login = React.createClass({
     handleChange: React.PropTypes.func.isRequired,
     handleSubmit: React.PropTypes.func.isRequired,
     toggleEmailForm: React.PropTypes.func.isRequired,
-    login: React.PropTypes.func.isRequired,
     reqPending: React.PropTypes.bool.isRequired,
     errmsg: React.PropTypes.object
   },
