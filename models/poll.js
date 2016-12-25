@@ -36,6 +36,14 @@ poll.statics.searchByQuery = function(search, cb) {
           .populate("author")
           .exec(Tools.formatPolls(cb))
         );
+
+      case "all":
+        return (
+          this.find()
+            .sort({ createdAt: -1 })
+            .populate("author")
+            .exec(Tools.formatPolls(cb))
+        );
     }
   }
   return (

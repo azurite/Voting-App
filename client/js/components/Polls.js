@@ -20,6 +20,10 @@ const SearchBar = React.createClass({
     searchValue: React.PropTypes.string.isRequired,
     handleChange: React.PropTypes.func.isRequired
   },
+  customSearch: function(cmd, e) {
+    this.props.handleChange(null, cmd);
+    this.props.submitSearch(cmd, e);
+  },
   render: function() {
     return (
       <Row>
@@ -33,6 +37,8 @@ const SearchBar = React.createClass({
                 <FormControl type="text" placeholder="Seach Polls" value={this.props.searchValue} onChange={this.props.handleChange}/>
                 <InputGroup.Button>
                   <Button type="submit">Go!</Button>
+                  <Button onClick={this.customSearch.bind(this, "/all")}>All</Button>
+                  <Button onClick={this.customSearch.bind(this, "/latest")}>Latest</Button>
                 </InputGroup.Button>
               </InputGroup>
             </FormGroup>
@@ -104,8 +110,13 @@ const mapDispatchToProps = function(dispatch) {
         dispatch(actions.fetchSuccess(polls));
       });
     },
-    updateSearch: function(e) {
-      dispatch(actions.updateSearch(e.target.value));
+    updateSearch: function(e, cmd) {
+      if(cmd) {
+        dispatch(actions.updateSearch(cmd));
+      }
+      else {
+        dispatch(actions.updateSearch(e.target.value));
+      }
     }
   };
 };
