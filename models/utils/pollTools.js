@@ -39,6 +39,11 @@ module.exports = {
   unique: function unique(arr) {
     arr.sort((a, b) => {
       var Wa = a.option, Wb = b.option, length = Math.min(Wa.length, Wb.length);
+
+      if(Wa === Wb) {
+        return b.votes - a.votes;
+      }
+
       for(var i = 0; i < length; i++) {
         if(Wa.charAt(i) >= Wb.charAt(i)) {
           return 1;
@@ -48,6 +53,11 @@ module.exports = {
       }
     });
 
+    return arr.filter((opt, idx, self) => {
+      return self.findIndex((o) => { return o.option === opt.option; }) === idx;
+    });
+
+    /*
     for(var j = 0; j < arr.length - 1; j++) {
       if(arr[j].option === arr[j+1].option) {
         var idx = arr[j].votes < arr[j+1].votes ? j : j + 1;
@@ -56,6 +66,7 @@ module.exports = {
     }
 
     return arr;
+    */
   },
   use: function(target, tools) {
     var end = target;
