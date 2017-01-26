@@ -1,4 +1,4 @@
-![fcc-logo](https://raw.githubusercontent.com/MarkoN95/Voting-App/master/client/media/favicon.ico)
+![fcc-logo](https://raw.githubusercontent.com/MarkoN95/Voting-App/master/client/media/fcc-logo.png)
 
 ## Dynamic Web Application Projects
 
