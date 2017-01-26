@@ -26,6 +26,7 @@ const sessionOptions = {
 };
 
 const serveStatic = require("serve-static");
+const favicon = require("serve-favicon");
 const configureApi = require("./app/api/root");
 const initializeStore = require("./app/initialize-store");
 const configureRoutes = require("./app/routes");
@@ -34,6 +35,8 @@ app.set("view engine", "pug");
 app.set("views", path.join(process.cwd(), "client"));
 
 app.use(serveStatic(path.join(process.cwd(), "build", "client")));
+app.use(serveStatic(path.join(process.cwd(), "client")));
+app.use(favicon(path.join(process.cwd(), "client", "media", "facivon.ico")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session(sessionOptions));
