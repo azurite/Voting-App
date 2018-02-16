@@ -9,8 +9,7 @@ const account = new Schema({
 });
 
 account.plugin(passportLocalMongoose, {
-  populateFields: "ownPolls",
-  errorMessages: true
+  populateFields: "ownPolls"
 });
 
 account.statics.getUpdatedUser = function(username, cb) {
