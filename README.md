@@ -1,8 +1,6 @@
-![fcc-logo](https://raw.githubusercontent.com/MarkoN95/Voting-App/master/client/media/fcc-logo.png)
-
 ## Dynamic Web Application Projects
 
-[Voting App](https://www.freecodecamp.com/challenges/build-a-voting-app)
+### Voting App
 
 ### User stories:
 
@@ -14,5 +12,3 @@
 * As an unauthenticated or authenticated user, I can see and vote on everyone's polls.
 * As an unauthenticated or authenticated user, I can see the results of polls in chart form.
 * As an authenticated user, if I don't like the options on a poll, I can create a new option.
-
-#### Live version running [here](https://votinator.herokuapp.com/)
